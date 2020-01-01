@@ -1,4 +1,6 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:qrcode_app/config/ads.dart';
 import 'package:qrcode_app/screens/NewQRScreen.dart';
 
 class SavedScreen extends StatefulWidget {
@@ -9,6 +11,36 @@ class SavedScreen extends StatefulWidget {
 }
 
 class _SavedScreenState extends State<SavedScreen> {
+  BannerAd _bannerAd;
+  BannerAd createBannerAd() {
+    return BannerAd(
+        adUnitId: bannerId,
+        size: AdSize.banner,
+        targetingInfo: ADS().targetingInfo,
+        listener: (MobileAdEvent event) {
+          print("BannerAd $event");
+        });
+  }
+
+  @override
+  void initState() {
+    FirebaseAdMob.instance.initialize(
+      appId: bannerId,
+    );
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(
+        anchorType: AnchorType.bottom,
+      );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

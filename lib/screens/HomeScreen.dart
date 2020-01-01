@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
+import 'package:qrcode_app/common/Common.dart';
+import 'package:qrcode_app/config/ads.dart';
+import 'package:qrcode_app/main.dart';
 import 'package:qrcode_app/screens/DrawerScreen.dart';
 import 'package:qrcode_app/screens/HistoryScreen.dart';
 import 'package:qrcode_app/screens/NewQRScreen.dart';
@@ -29,10 +33,34 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<bool> saveQR(String name) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("name", name);
-    return prefs.commit();
+  BannerAd _bannerAd;
+  BannerAd createBannerAd() {
+    return BannerAd(
+        adUnitId: bannerId,
+        size: AdSize.banner,
+        targetingInfo: ADS().targetingInfo,
+        listener: (MobileAdEvent event) {
+          print("BannerAd $event");
+        });
+  }
+
+  @override
+  void initState() {
+    FirebaseAdMob.instance.initialize(
+      appId: bannerId,
+    );
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(
+        anchorType: AnchorType.bottom,
+      );
+    super.initState();
+    Common.listhis = [];
+  }
+
+  Future<Null> saveQR(String name) async {
+    Common.listhis.add(name);
+    return prefs.setStringList("list", Common.listhis);
   }
 
   void _onQRViewCreated(QRViewController controller) {
@@ -53,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _bannerAd.dispose();
     controller?.dispose();
     super.dispose();
   }

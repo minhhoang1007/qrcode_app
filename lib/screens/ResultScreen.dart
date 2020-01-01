@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ResultScreen extends StatefulWidget {
   String id;
@@ -9,6 +10,15 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  String urlShare = 'https://flutter.dev';
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +110,9 @@ class _ResultScreenState extends State<ResultScreen> {
                   Column(
                     children: <Widget>[
                       GestureDetector(
+                        onTap: () {
+                          _launchURL(urlShare);
+                        },
                         child: Container(
                           height: 50,
                           width: 50,

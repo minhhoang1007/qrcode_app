@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:qrcode_app/screens/HomeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+SharedPreferences prefs;
+
+void main() async {
+  prefs = await SharedPreferences.getInstance();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

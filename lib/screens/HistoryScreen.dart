@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qrcode_app/common/Common.dart';
+import 'package:qrcode_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -11,8 +13,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   String his = "";
   Future<Null> getString() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    his = prefs.getString('name');
+    Common.listhis = prefs.getStringList('list');
   }
 
   List<String> items = [
@@ -37,34 +38,43 @@ class _HistoryScreenState extends State<HistoryScreen> {
         title: Center(
             child: Text("Lịch sử", style: TextStyle(color: Colors.white))),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.ac_unit),
-            iconSize: 30,
-            onPressed: () {},
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              height: 40,
+              width: 40,
+              child: Image.asset(
+                "assets/images/vip.png",
+                fit: BoxFit.fill,
+              ),
+            ),
           ),
         ],
       ),
       body: Container(
-        color: Colors.black,
-        child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, int index) {
-            return Padding(
-              padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.05,
-                right: MediaQuery.of(context).size.width * 0.05,
-              ),
-              child: Card(
-                color: Colors.grey,
-                child: ListTile(
-                  title:
-                      Text(items[index], style: TextStyle(color: Colors.white)),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+          color: Colors.black,
+          child: Common.listhis.length != null
+              ? ListView.builder(
+                  itemCount: Common.listhis.length,
+                  itemBuilder: (context, int index) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.05,
+                        right: MediaQuery.of(context).size.width * 0.05,
+                      ),
+                      child: Card(
+                        color: Colors.grey,
+                        child: ListTile(
+                          title: Text(Common.listhis[index],
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : Center(
+                  child: Text("No data"),
+                )),
     );
   }
 }

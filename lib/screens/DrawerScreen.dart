@@ -1,4 +1,6 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:qrcode_app/config/ads.dart';
 import 'package:qrcode_app/screens/HistoryScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,6 +23,36 @@ class _DrawerScreenState extends State<DrawerScreen> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  BannerAd _bannerAd;
+  BannerAd createBannerAd() {
+    return BannerAd(
+        adUnitId: bannerId,
+        size: AdSize.banner,
+        targetingInfo: ADS().targetingInfo,
+        listener: (MobileAdEvent event) {
+          print("BannerAd $event");
+        });
+  }
+
+  @override
+  void initState() {
+    FirebaseAdMob.instance.initialize(
+      appId: bannerId,
+    );
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(
+        anchorType: AnchorType.bottom,
+      );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,9 +90,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
               onTap: () {
                 _launchURL(urlNangcap);
               },
-              leading: Icon(
-                Icons.access_alarms,
-                color: Colors.white,
+              leading: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(),
+                child: Image.asset(
+                  "assets/images/vip.png",
+                  fit: BoxFit.fill,
+                ),
               ),
               title: Text(
                 "Nâng cấp phiên bản VIP",
