@@ -25,7 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
   File imageFile;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   var qrText = "";
+  bool flash;
   QRViewController controller;
+
+  // truy cap thu vien anh
   void _openGallary(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
@@ -33,7 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  //Quang Cao
   BannerAd _bannerAd;
+  int _coins = 0;
   BannerAd createBannerAd() {
     return BannerAd(
         adUnitId: bannerId,
@@ -46,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    super.initState();
     FirebaseAdMob.instance.initialize(
       appId: bannerId,
     );
@@ -54,15 +60,48 @@ class _HomeScreenState extends State<HomeScreen> {
       ..show(
         anchorType: AnchorType.bottom,
       );
-    super.initState();
+    RewardedVideoAd.instance
+        .load(adUnitId: videoId, targetingInfo: ADS().targetingInfo);
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("RewardedVideoAd event $event");
+      if (event == RewardedVideoAdEvent.rewarded) {
+        setState(() {
+          _coins += rewardAmount;
+        });
+      }
+    };
+
     Common.listhis = [];
+    flash = false;
   }
 
+  //play video ads
+  playAd() {
+    if (_coins == 0) {
+      setState(() {
+        RewardedVideoAd.instance
+            .load(adUnitId: videoId, targetingInfo: ADS().targetingInfo);
+      });
+      RewardedVideoAd.instance.show();
+      print("Coins $_coins");
+    } else {
+      setState(() {
+        _coins += -1;
+        RewardedVideoAd.instance
+            .load(adUnitId: videoId, targetingInfo: ADS().targetingInfo);
+      });
+      print("Coins $_coins");
+    }
+  }
+
+  //Save history
   Future<Null> saveQR(String name) async {
     Common.listhis.add(name);
     return prefs.setStringList("list", Common.listhis);
   }
 
+  //QR Code
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
@@ -84,6 +123,123 @@ class _HomeScreenState extends State<HomeScreen> {
     _bannerAd.dispose();
     controller?.dispose();
     super.dispose();
+  }
+
+  //Dialog
+  @override
+  void _showDialogNew() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Container(
+              height: 50,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.orange,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Unlock Generate QR Code",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.black),
+                  ),
+                  height: 200,
+                  width: 120,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset("assets/images/vip.png"),
+                      Text("Mua voi gia 100000d"),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          height: 30,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "MUA",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.black),
+                  ),
+                  height: 200,
+                  width: 120,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset("assets/images/vip.png"),
+                      Text("Xem quang cao nhan thuong"),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          playAd();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NewQRScreen(),
+                              ));
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.orange,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "XEM",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -109,7 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
           padding:
               EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.3),
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              flash ? controller.toggleFlash() : Container();
+              setState(() {
+                flash ? flash = false : flash = true;
+              });
+            },
             child: Container(
               height: 30,
               width: 30,
@@ -125,7 +286,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: <Widget>[
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              print("Load video");
+              playAd();
+            },
             child: Container(
               height: 50,
               width: 50,
@@ -160,24 +324,24 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           Positioned(
-            child: Align(
-              alignment: Alignment.bottomCenter,
+            bottom: MediaQuery.of(context).size.height * 0.05,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.1,
+              ),
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(
-                      width: 10,
-                    ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NewQRScreen(),
-                            ));
+                        _showDialogNew();
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => NewQRScreen(),
+                        //     ));
                       },
                       child: Column(
                         children: <Widget>[
@@ -197,6 +361,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text("Tạo mã", style: TextStyle(color: Colors.white))
                         ],
                       ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -225,6 +392,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
+                    ),
                     GestureDetector(
                       onTap: () {
                         _openGallary(context);
@@ -248,6 +418,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(color: Colors.white))
                         ],
                       ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -275,9 +448,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text("Lịch sử", style: TextStyle(color: Colors.white))
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      width: 10,
                     ),
                   ],
                 ),
