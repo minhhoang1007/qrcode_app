@@ -49,9 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
+  bool isload = false;
   @override
   void initState() {
     super.initState();
+    MyApp.platform.invokeMethod("rateAuto");
     FirebaseAdMob.instance.initialize(
       appId: bannerId,
     );
@@ -70,8 +72,17 @@ class _HomeScreenState extends State<HomeScreen> {
           _coins += rewardAmount;
         });
       }
+      if (event == RewardedVideoAdEvent.closed) {
+        setState(() {
+          isload = false;
+        });
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NewQRScreen(),
+            ));
+      }
     };
-
     Common.listhis = [];
     flash = false;
   }
@@ -83,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
         RewardedVideoAd.instance
             .load(adUnitId: videoId, targetingInfo: ADS().targetingInfo);
       });
+
       RewardedVideoAd.instance.show();
       print("Coins $_coins");
     } else {
@@ -136,14 +148,18 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 50,
               width: double.infinity,
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
                 color: Colors.orange,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    "Unlock Generate QR Code",
-                    style: TextStyle(color: Colors.white),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      "Unlock Generate QR Code",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -169,25 +185,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.black),
                   ),
-                  height: 200,
-                  width: 120,
+                  height: 220,
+                  width: MediaQuery.of(context).size.width * 0.32,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Image.asset("assets/images/vip.png"),
-                      Text("Mua voi gia 100000d"),
+                      Center(
+                        child: Text("Use this function forever!!!",
+                            style: TextStyle(fontSize: 13)),
+                      ),
+                      Text(
+                        "15.000 đ",
+                        style: TextStyle(color: Colors.blue),
+                      ),
                       GestureDetector(
                         onTap: () {},
                         child: Container(
-                          height: 30,
-                          width: 60,
+                          height: 40,
+                          width: 100,
                           decoration: BoxDecoration(
                             color: Colors.green,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Center(
                             child: Text(
-                              "MUA",
+                              "BUY NOW",
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -196,38 +219,47 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.black),
                   ),
-                  height: 200,
-                  width: 120,
+                  height: 220,
+                  width: MediaQuery.of(context).size.width * 0.32,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Image.asset("assets/images/vip.png"),
-                      Text("Xem quang cao nhan thuong"),
+                      Center(
+                        child: Text(
+                          "Get 2 times free to generate!!!",
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context).pop();
+                          setState(() {
+                            isload = true;
+                          });
                           playAd();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NewQRScreen(),
-                              ));
                         },
                         child: Container(
-                          height: 30,
-                          width: 60,
+                          height: 40,
+                          width: 100,
                           decoration: BoxDecoration(
                             color: Colors.orange,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Center(
                             child: Text(
-                              "XEM",
+                              "WATCH NOW",
                               style: TextStyle(color: Colors.white),
                             ),
                           ),

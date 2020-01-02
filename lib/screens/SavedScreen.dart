@@ -1,6 +1,9 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qrcode_app/common/Common.dart';
 import 'package:qrcode_app/config/ads.dart';
+import 'package:qrcode_app/main.dart';
 import 'package:qrcode_app/screens/NewQRScreen.dart';
 
 class SavedScreen extends StatefulWidget {
@@ -11,6 +14,10 @@ class SavedScreen extends StatefulWidget {
 }
 
 class _SavedScreenState extends State<SavedScreen> {
+  Future<Null> getString() async {
+    Common.img = prefs.getStringList('listtwo');
+  }
+
   BannerAd _bannerAd;
   BannerAd createBannerAd() {
     return BannerAd(
@@ -72,45 +79,77 @@ class _SavedScreenState extends State<SavedScreen> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-        ),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-              ),
-              Text("Vui lòng tạo mã QR để nhận kết quả",
-                  style: TextStyle(color: Colors.white, fontSize: 20)),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NewQRScreen()));
+        color: Colors.black,
+        child: Common.img != null
+            ? ListView.builder(
+                itemCount: Common.img.length,
+                itemBuilder: (context, int index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.05,
+                      right: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          color: Colors.white,
+                          height: 100,
+                          width: 100,
+                          child: QrImage(
+                            data: Common.img[index],
+                            version: QrVersions.auto,
+                            size: 200.0,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("Name: " + Common.img[index],
+                            style: TextStyle(color: Colors.white))
+                      ],
+                    ),
+                  );
                 },
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text("Bắt đầu tạo mã",
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                  ),
+              )
+            : Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                    ),
+                    Text("Vui lòng tạo mã QR để nhận kết quả",
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NewQRScreen()));
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Center(
+                          child: Text("Bắt đầu tạo mã",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }

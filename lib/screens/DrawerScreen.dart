@@ -29,7 +29,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   BannerAd createBannerAd() {
     return BannerAd(
         adUnitId: bannerId,
-        size: AdSize.banner,
+        size: AdSize.mediumRectangle,
         targetingInfo: ADS().targetingInfo,
         listener: (MobileAdEvent event) {
           print("BannerAd $event");
@@ -44,6 +44,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     _bannerAd = createBannerAd()
       ..load()
       ..show(
+        anchorOffset: 60.0,
         anchorType: AnchorType.bottom,
       );
     super.initState();

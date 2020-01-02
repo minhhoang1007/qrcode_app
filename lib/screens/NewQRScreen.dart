@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qrcode_app/common/Common.dart';
+import 'package:qrcode_app/main.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class NewQRScreen extends StatefulWidget {
   NewQRScreen({Key key}) : super(key: key);
@@ -10,8 +17,9 @@ class NewQRScreen extends StatefulWidget {
 
 class _NewQRScreenState extends State<NewQRScreen> {
   var _controller = TextEditingController();
-
+  GlobalKey _globalKey = GlobalKey();
   String hn;
+  String textcode = "";
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -20,11 +28,24 @@ class _NewQRScreenState extends State<NewQRScreen> {
   void initState() {
     _controller.addListener(() {
       print("value: ${_controller.text}");
-
-      setState(() {});
+      setState(() {
+        textcode = _controller.text;
+      });
     });
     super.initState();
     hn = 'QRCode';
+    Common.img = [];
+  }
+
+  Future<Null> saveQR() async {
+    Common.img.add(textcode);
+    return prefs.setStringList("listtwo", Common.img);
+  }
+
+  void runSave() {
+    saveQR().then((value) {}, onError: (error) {
+      print(error);
+    });
   }
 
   @override
@@ -33,14 +54,16 @@ class _NewQRScreenState extends State<NewQRScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            //title: Text("Day la dialog"),
             title: Container(
               height: 300,
               width: 300,
-              child: QrImage(
-                data: _controller.text,
-                version: QrVersions.auto,
-                size: 200.0,
+              child: RepaintBoundary(
+                key: _globalKey,
+                child: QrImage(
+                  data: _controller.text,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
               ),
             ),
             content: Text("Create QR Code Successfully",
@@ -48,6 +71,18 @@ class _NewQRScreenState extends State<NewQRScreen> {
                     color: Colors.orange, fontWeight: FontWeight.bold)),
             actions: <Widget>[
               GestureDetector(
+                onTap: () {
+                  runSave();
+                  Fluttertoast.showToast(
+                      msg: "Save Image Code",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIos: 1,
+                      backgroundColor: Colors.white,
+                      textColor: Colors.orange,
+                      fontSize: 16.0);
+                  Navigator.of(context).pop();
+                },
                 child: Container(
                   height: 50,
                   width: 80,

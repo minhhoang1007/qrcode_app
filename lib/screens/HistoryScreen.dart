@@ -11,18 +11,14 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  String his = "";
   Future<Null> getString() async {
     Common.listhis = prefs.getStringList('list');
   }
 
-  List<String> items = [
-    "abc",
-    "acb",
-    "bca",
-  ];
   @override
   Widget build(BuildContext context) {
+    print("aaa");
+    print(Common.listhis.length);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -53,7 +49,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
       body: Container(
           color: Colors.black,
-          child: Common.listhis.length != null
+          child: Common.listhis.length != 0
               ? ListView.builder(
                   itemCount: Common.listhis.length,
                   itemBuilder: (context, int index) {
@@ -73,7 +69,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   },
                 )
               : Center(
-                  child: Text("No data"),
+                  child: Text("No data", style: TextStyle(color: Colors.white)),
                 )),
     );
   }
