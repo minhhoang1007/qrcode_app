@@ -17,8 +17,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("aaa");
-    print(Common.listhis.length);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -61,6 +59,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       child: Card(
                         color: Colors.grey,
                         child: ListTile(
+                          leading: Common.listhis[index]
+                                  .contains(new RegExp(r'[0-9]'))
+                              ? Icon(
+                                  Icons.call,
+                                  color: Colors.green,
+                                )
+                              : Icon(
+                                  Icons.textsms,
+                                  color: Colors.white,
+                                ),
                           title: Text(Common.listhis[index],
                               style: TextStyle(color: Colors.white)),
                         ),

@@ -121,6 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
         qrText = scanData;
       });
       saveQR(qrText);
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
       qrText == null
           ? Container()
           : Navigator.push(
@@ -144,11 +146,12 @@ class _HomeScreenState extends State<HomeScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            titlePadding: EdgeInsets.all(0),
+            contentPadding: EdgeInsets.all(10),
             title: Container(
               height: 50,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
                 color: Colors.orange,
               ),
               child: Row(
@@ -158,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       "Unlock Generate QR Code",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                   GestureDetector(
@@ -185,14 +188,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.black),
                   ),
-                  height: 220,
+                  height: 200,
                   width: MediaQuery.of(context).size.width * 0.32,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Image.asset("assets/images/vip.png"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                          height: 70,
+                          width: 70,
+                          child: Image.asset("assets/images/tien.jpg")),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Center(
-                        child: Text("Use this function forever!!!",
+                        child: Text("  Use this function    forever!!!",
                             style: TextStyle(fontSize: 13)),
                       ),
                       Text(
@@ -227,15 +239,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.black),
                   ),
-                  height: 220,
+                  height: 200,
                   width: MediaQuery.of(context).size.width * 0.32,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Image.asset("assets/images/vip.png"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                          height: 70,
+                          width: 70,
+                          child: Image.asset("assets/images/play.jpg")),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Center(
                         child: Text(
-                          "Get 2 times free to generate!!!",
+                          "  Get 2 times free to    generate!!!",
                           style: TextStyle(fontSize: 13),
                         ),
                       ),
@@ -354,6 +375,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ],
+          ),
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.55,
+            child: Container(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.1,
+                  right: MediaQuery.of(context).size.width * 0.1),
+              width: MediaQuery.of(context).size.width * 1,
+              height: MediaQuery.of(context).size.height * 0.05,
+              child: Center(
+                child: Divider(
+                  color: Colors.red,
+                ),
+              ),
+            ),
           ),
           Positioned(
             bottom: MediaQuery.of(context).size.height * 0.05,

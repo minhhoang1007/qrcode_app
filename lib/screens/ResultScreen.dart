@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -89,6 +90,16 @@ class _ResultScreenState extends State<ResultScreen> {
                   Column(
                     children: <Widget>[
                       GestureDetector(
+                        onTap: () {
+                          Fluttertoast.showToast(
+                              msg: "Đã sao chép",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIos: 1,
+                              backgroundColor: Colors.white,
+                              textColor: Colors.orange,
+                              fontSize: 16.0);
+                        },
                         child: Container(
                           height: 50,
                           width: 50,
