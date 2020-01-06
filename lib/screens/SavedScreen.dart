@@ -61,7 +61,7 @@ class _SavedScreenState extends State<SavedScreen> {
         ),
         title: Center(
           child: Text(
-            "Đã lưu",
+            "Saved",
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -119,7 +119,7 @@ class _SavedScreenState extends State<SavedScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
-                    Text("Vui lòng tạo mã QR để nhận kết quả",
+                    Text("Please create a QR code to receive results",
                         style: TextStyle(color: Colors.white, fontSize: 20)),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
@@ -139,7 +139,7 @@ class _SavedScreenState extends State<SavedScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
-                          child: Text("Bắt đầu tạo mã",
+                          child: Text("Start create code",
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,

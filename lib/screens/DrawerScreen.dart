@@ -83,7 +83,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 color: Colors.white,
               ),
               title: Text(
-                "Lịch sử",
+                "History",
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -101,7 +101,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 ),
               ),
               title: Text(
-                "Nâng cấp phiên bản VIP",
+                " Upgrade version VIP",
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -114,7 +114,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 color: Colors.white,
               ),
               title: Text(
-                "Phản hồi cho nhà phát triển",
+                "Feedback to the developer",
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -127,7 +127,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 color: Colors.white,
               ),
               title: Text(
-                "Kiểm tra phiên bản cập nhật",
+                "Check for updated version",
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -140,7 +140,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 color: Colors.white,
               ),
               title: Text(
-                "Chính sách",
+                "Policy",
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -150,7 +150,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 color: Colors.white,
               ),
               title: Text(
-                "Ứng dụng khác",
+                "Other application",
                 style: TextStyle(color: Colors.white),
               ),
             ),

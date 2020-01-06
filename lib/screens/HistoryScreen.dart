@@ -30,7 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           },
         ),
         title: Center(
-            child: Text("Lịch sử", style: TextStyle(color: Colors.white))),
+            child: Text("History", style: TextStyle(color: Colors.white))),
         actions: <Widget>[
           GestureDetector(
             onTap: () {},

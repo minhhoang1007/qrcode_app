@@ -74,7 +74,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(left: 10, top: 10),
-                  child: Text("ID sản phẩm: \n" + widget.id),
+                  child: Text("ID product: \n" + widget.id),
                 ),
               ),
             ),
@@ -92,7 +92,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       GestureDetector(
                         onTap: () {
                           Fluttertoast.showToast(
-                              msg: "Đã sao chép",
+                              msg: "copied to clipboard",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIos: 1,
@@ -115,7 +115,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           ),
                         ),
                       ),
-                      Text("Sao chép", style: TextStyle(color: Colors.white))
+                      Text("Copy", style: TextStyle(color: Colors.white))
                     ],
                   ),
                   Column(
@@ -139,7 +139,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           ),
                         ),
                       ),
-                      Text("Chia sẻ", style: TextStyle(color: Colors.white))
+                      Text("Share", style: TextStyle(color: Colors.white))
                     ],
                   ),
                   Column(
@@ -160,7 +160,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           ),
                         ),
                       ),
-                      Text("Tìm kiếm", style: TextStyle(color: Colors.white))
+                      Text("Search", style: TextStyle(color: Colors.white))
                     ],
                   ),
                   Column(

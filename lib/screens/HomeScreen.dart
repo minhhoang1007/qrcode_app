@@ -121,8 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
         qrText = scanData;
       });
       saveQR(qrText);
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      //Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       qrText == null
           ? Container()
           : Navigator.push(
@@ -272,8 +272,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           playAd();
                         },
                         child: Container(
+                          alignment: Alignment.center,
                           height: 40,
-                          width: 100,
+                          width: 110,
                           decoration: BoxDecoration(
                             color: Colors.orange,
                             borderRadius: BorderRadius.circular(12),
@@ -300,19 +301,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: Icon(
-            Icons.list,
-            color: Colors.white,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: IconButton(
+            icon: Icon(
+              Icons.list,
+              color: Colors.white,
+            ),
+            iconSize: 30,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DrawerScreen(),
+                  ));
+            },
           ),
-          iconSize: 40,
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DrawerScreen(),
-                ));
-          },
         ),
         title: Padding(
           padding:
@@ -426,7 +430,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Text("Tạo mã", style: TextStyle(color: Colors.white))
+                          Text("Create", style: TextStyle(color: Colors.white))
                         ],
                       ),
                     ),
@@ -456,7 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Text("Đã lưu", style: TextStyle(color: Colors.white))
+                          Text("Saved", style: TextStyle(color: Colors.white))
                         ],
                       ),
                     ),
@@ -482,7 +486,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Text("Quét ảnh",
+                          Text("Scan Image",
                               style: TextStyle(color: Colors.white))
                         ],
                       ),
@@ -513,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Text("Lịch sử", style: TextStyle(color: Colors.white))
+                          Text("History", style: TextStyle(color: Colors.white))
                         ],
                       ),
                     ),

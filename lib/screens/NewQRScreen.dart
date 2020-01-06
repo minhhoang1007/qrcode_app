@@ -132,7 +132,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
         ),
         title: Center(
           child: Text(
-            "Tạo mã",
+            "Create code",
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -163,8 +163,8 @@ class _NewQRScreenState extends State<NewQRScreen> {
                   decoration: InputDecoration(
                     hintStyle: TextStyle(fontSize: 16),
                     border: InputBorder.none,
-                    hintText: "Nhập trang web, văn bản,"
-                        "email hoặc tin nhắn của bạn ở đây",
+                    hintText: "Enter website, text,"
+                        "email,....",
                     contentPadding: EdgeInsets.all(10),
                   ),
                 ),
@@ -223,7 +223,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      "Tạo mã",
+                      "Create",
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
