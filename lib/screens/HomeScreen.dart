@@ -12,7 +12,6 @@ import 'package:qrcode_app/screens/HistoryScreen.dart';
 import 'package:qrcode_app/screens/NewQRScreen.dart';
 import 'package:qrcode_app/screens/ResultScreen.dart';
 import 'package:qrcode_app/screens/SavedScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -121,14 +120,13 @@ class _HomeScreenState extends State<HomeScreen> {
         qrText = scanData;
       });
       saveQR(qrText);
-      //Navigator.of(context).pop();
-      // Navigator.of(context).pop();
       qrText == null
           ? Container()
           : Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => ResultScreen(id: qrText)));
+      Navigator.of(context).pop();
     });
   }
 
@@ -409,11 +407,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTap: () {
                         _showDialogNew();
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => NewQRScreen(),
-                        //     ));
                       },
                       child: Column(
                         children: <Widget>[
@@ -486,7 +479,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Text("Scan Image",
+                          Text("Scan Photo",
                               style: TextStyle(color: Colors.white))
                         ],
                       ),

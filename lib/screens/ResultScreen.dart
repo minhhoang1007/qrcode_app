@@ -1,4 +1,6 @@
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,7 +13,16 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  String urlShare = 'https://flutter.dev';
+  Future<void> _shareText() async {
+    try {
+      Share.text('ID Product: ', widget.id, 'text/plain');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  String urlSearch = 'https://www.google.com/search?q=widget.id';
+  String urlWeb = 'https://www.google.com';
   _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -74,7 +85,9 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(left: 10, top: 10),
-                  child: Text("ID product: \n" + widget.id),
+                  child: widget.id.contains(new RegExp(r'[0-9]'))
+                      ? Text("ID product: \n" + widget.id)
+                      : Text("Link URL: \n" + widget.id),
                 ),
               ),
             ),
@@ -91,6 +104,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
+                          Clipboard.setData(ClipboardData(text: widget.id));
                           Fluttertoast.showToast(
                               msg: "copied to clipboard",
                               toastLength: Toast.LENGTH_SHORT,
@@ -121,8 +135,8 @@ class _ResultScreenState extends State<ResultScreen> {
                   Column(
                     children: <Widget>[
                       GestureDetector(
-                        onTap: () {
-                          _launchURL(urlShare);
+                        onTap: () async {
+                          await _shareText();
                         },
                         child: Container(
                           height: 50,
@@ -145,6 +159,9 @@ class _ResultScreenState extends State<ResultScreen> {
                   Column(
                     children: <Widget>[
                       GestureDetector(
+                        onTap: () {
+                          _launchURL(urlSearch);
+                        },
                         child: Container(
                           height: 50,
                           width: 50,
@@ -166,6 +183,9 @@ class _ResultScreenState extends State<ResultScreen> {
                   Column(
                     children: <Widget>[
                       GestureDetector(
+                        onTap: () {
+                          _launchURL(urlWeb);
+                        },
                         child: Container(
                           height: 50,
                           width: 50,
