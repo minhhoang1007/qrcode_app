@@ -25,34 +25,33 @@ class _DrawerScreenState extends State<DrawerScreen> {
     }
   }
 
-  BannerAd _bannerAd;
-  BannerAd createBannerAd() {
-    return BannerAd(
-        adUnitId: bannerId,
-        size: AdSize.mediumRectangle,
-        targetingInfo: ADS().targetingInfo,
-        listener: (MobileAdEvent event) {
-          print("BannerAd $event");
-        });
-  }
-
+  // BannerAd _bannerAd;
+  // BannerAd createBannerAd() {
+  //   return BannerAd(
+  //       adUnitId: bannerId,
+  //       size: AdSize.mediumRectangle,
+  //       targetingInfo: ADS().targetingInfo,
+  //       listener: (MobileAdEvent event) {
+  //         print("BannerAd $event");
+  //       });
+  // }
   @override
   void initState() {
+    super.initState();
     // FirebaseAdMob.instance.initialize(
     //   appId: bannerId,
     // );
-    _bannerAd = createBannerAd()
-      ..load()
-      ..show(
-        anchorOffset: 60.0,
-        anchorType: AnchorType.bottom,
-      );
-    super.initState();
+    // _bannerAd = createBannerAd()
+    //   ..load()
+    //   ..show(
+    //     anchorOffset: 60.0,
+    //     anchorType: AnchorType.bottom,
+    //   );
   }
 
   @override
   void dispose() {
-    _bannerAd.dispose();
+    //_bannerAd.dispose();
     super.dispose();
   }
 
