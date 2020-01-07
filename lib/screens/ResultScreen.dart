@@ -6,13 +6,16 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ResultScreen extends StatefulWidget {
   String id;
-  ResultScreen({this.id, Key key}) : super(key: key);
+  var callBack;
+  ResultScreen({this.id, Key key, this.callBack}) : super(key: key);
 
   @override
   _ResultScreenState createState() => _ResultScreenState();
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  String urlSearch;
+  String urlWeb;
   Future<void> _shareText() async {
     try {
       Share.text('ID Product: ', widget.id, 'text/plain');
@@ -21,8 +24,13 @@ class _ResultScreenState extends State<ResultScreen> {
     }
   }
 
-  String urlSearch = 'https://www.google.com/search?q=widget.id';
-  String urlWeb = 'https://www.google.com';
+  @override
+  void initState() {
+    urlSearch = 'https://www.google.com/search?q=${widget.id}';
+    urlWeb = 'https://www.google.com';
+    super.initState();
+  }
+
   _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -36,14 +44,19 @@ class _ResultScreenState extends State<ResultScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: Icon(
-            Icons.home,
-            color: Colors.white,
-          ),
-          onPressed: () {
+        leading: GestureDetector(
+          onTap: () {
+            widget.callBack();
             Navigator.of(context).pop();
           },
+          child: Container(
+            height: 30,
+            width: 30,
+            child: Icon(
+              Icons.home,
+              color: Colors.white,
+            ),
+          ),
         ),
         actions: <Widget>[
           GestureDetector(
@@ -106,7 +119,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: widget.id));
                           Fluttertoast.showToast(
-                              msg: "copied to clipboard",
+                              msg: "Copied to clipboard",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIos: 1,
@@ -218,6 +231,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   left: MediaQuery.of(context).size.width * 0.3),
               child: GestureDetector(
                 onTap: () {
+                  widget.callBack();
                   Navigator.of(context).pop();
                 },
                 child: Column(
@@ -235,10 +249,15 @@ class _ResultScreenState extends State<ResultScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Text(
                       "Scan new",
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
                     ),
                   ],
                 ),

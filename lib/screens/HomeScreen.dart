@@ -15,7 +15,6 @@ import 'package:qrcode_app/screens/SavedScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -93,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
         RewardedVideoAd.instance
             .load(adUnitId: videoId, targetingInfo: ADS().targetingInfo);
       });
-
       RewardedVideoAd.instance.show();
       print("Coins $_coins");
     } else {
@@ -107,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   //Save history
-  Future<Null> saveQR(String name) async {
+  Future saveQR(String name) async {
     Common.listhis.add(name);
     return prefs.setStringList("list", Common.listhis);
   }
@@ -116,17 +114,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
+      print(scanData);
       setState(() {
         qrText = scanData;
       });
       saveQR(qrText);
-      qrText == null
-          ? Container()
-          : Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ResultScreen(id: qrText)));
-      Navigator.of(context).pop();
+      controller.pauseCamera();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ResultScreen(
+                    id: qrText,
+                    callBack: () {
+                      controller.resumeCamera();
+                    },
+                  )));
+      //controller.dispose();
     });
   }
 
@@ -423,7 +426,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Text("Create", style: TextStyle(color: Colors.white))
+                          Text("Generate",
+                              style: TextStyle(color: Colors.white))
                         ],
                       ),
                     ),
