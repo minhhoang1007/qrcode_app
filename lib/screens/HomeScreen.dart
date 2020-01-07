@@ -52,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     MyApp.platform.invokeMethod("rateAuto");
-    FirebaseAdMob.instance.initialize(
-      appId: bannerId,
-    );
+    // FirebaseAdMob.instance.initialize(
+    //   appId: bannerId,
+    // );
     _bannerAd = createBannerAd()
       ..load()
       ..show(
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _bannerAd.dispose();
+    _bannerAd?.dispose();
     controller?.dispose();
     super.dispose();
   }
@@ -311,6 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             iconSize: 30,
             onPressed: () {
+              _bannerAd?.dispose();
               Navigator.push(
                   context,
                   MaterialPageRoute(

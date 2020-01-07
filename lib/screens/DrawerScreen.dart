@@ -38,9 +38,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   @override
   void initState() {
-    FirebaseAdMob.instance.initialize(
-      appId: bannerId,
-    );
+    // FirebaseAdMob.instance.initialize(
+    //   appId: bannerId,
+    // );
     _bannerAd = createBannerAd()
       ..load()
       ..show(
