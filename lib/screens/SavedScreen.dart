@@ -1,4 +1,5 @@
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qrcode_app/common/Common.dart';
@@ -14,37 +15,92 @@ class SavedScreen extends StatefulWidget {
 }
 
 class _SavedScreenState extends State<SavedScreen> {
+  AdmobBannerSize bannerSize;
+  AdmobReward rewardAd;
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
   Future<Null> getString() async {
     Common.img = prefs.getStringList('listtwo');
   }
 
-  BannerAd _bannerAd;
-  BannerAd createBannerAd() {
-    return BannerAd(
-        adUnitId: bannerId,
-        size: AdSize.banner,
-        targetingInfo: ADS().targetingInfo,
-        listener: (MobileAdEvent event) {
-          print("BannerAd $event");
-        });
+  Future<Null> deleteString(String ind) {
+    Common.img.remove(ind);
   }
 
   @override
   void initState() {
-    FirebaseAdMob.instance.initialize(
-      appId: bannerId,
-    );
-    _bannerAd = createBannerAd()
-      ..load()
-      ..show(
-        anchorType: AnchorType.bottom,
-      );
+    rewardAd = AdmobReward(
+        adUnitId: videoId,
+        listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+          if (event == AdmobAdEvent.closed) {
+            rewardAd.load();
+          }
+          ;
+          handleEvent(event, args, 'Reward');
+        });
+    rewardAd.load();
     super.initState();
+  }
+
+  //Share
+  Future<void> _shareText(int intdex) async {
+    try {
+      Share.text('ID Product: ', Common.img[intdex], 'text/plain');
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        showSnackBar('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        showSnackBar('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        showSnackBar('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        showSnackBar('Admob $adType failed to load. :(');
+        break;
+      case AdmobAdEvent.rewarded:
+        showDialog(
+          context: scaffoldState.currentContext,
+          builder: (BuildContext context) {
+            return WillPopScope(
+              child: AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Reward callback fired. Thanks Andrew!'),
+                    Text('Type: ${args['type']}'),
+                    Text('Amount: ${args['amount']}'),
+                  ],
+                ),
+              ),
+              onWillPop: () async {
+                scaffoldState.currentState.hideCurrentSnackBar();
+                return true;
+              },
+            );
+          },
+        );
+        break;
+      default:
+    }
+  }
+
+  void showSnackBar(String content) {
+    scaffoldState.currentState.showSnackBar(SnackBar(
+      content: Text(content),
+      duration: Duration(milliseconds: 1500),
+    ));
   }
 
   @override
   void dispose() {
-    _bannerAd.dispose();
     super.dispose();
   }
 
@@ -71,16 +127,21 @@ class _SavedScreenState extends State<SavedScreen> {
               Icons.add,
               color: Colors.white,
             ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NewQRScreen()));
+            onPressed: () async {
+              if (await rewardAd.isLoaded) {
+                rewardAd.show();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NewQRScreen()));
+              } else {
+                showSnackBar("Interstitial ad is still loading...");
+              }
             },
           ),
         ],
       ),
       body: Container(
         color: Colors.black,
-        child: Common.img != null
+        child: Common.img.length != 0
             ? ListView.builder(
                 itemCount: Common.img.length,
                 itemBuilder: (context, int index) {
@@ -89,25 +150,27 @@ class _SavedScreenState extends State<SavedScreen> {
                       left: MediaQuery.of(context).size.width * 0.05,
                       right: MediaQuery.of(context).size.width * 0.05,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
+                    child: Card(
+                      color: Colors.grey,
+                      child: ListTile(
+                        onTap: () {
+                          _showSimpleDialog(index);
+                        },
+                        leading: Container(
                           color: Colors.white,
-                          height: 100,
-                          width: 100,
                           child: QrImage(
                             data: Common.img[index],
                             version: QrVersions.auto,
-                            size: 200.0,
+                            size: 50.0,
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
+                        title: Text(Common.img[index],
+                            style: TextStyle(color: Colors.white)),
+                        trailing: Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
                         ),
-                        Text("Name: " + Common.img[index],
-                            style: TextStyle(color: Colors.white))
-                      ],
+                      ),
                     ),
                   );
                 },
@@ -119,17 +182,26 @@ class _SavedScreenState extends State<SavedScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
-                    Text("Please create a QR code to receive results",
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.05),
+                      child: Text("Please create a QR code to receive results",
+                          style: TextStyle(color: Colors.white, fontSize: 20)),
+                    ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NewQRScreen()));
+                      onTap: () async {
+                        if (await rewardAd.isLoaded) {
+                          rewardAd.show();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewQRScreen()));
+                        } else {
+                          showSnackBar("Interstitial ad is still loading...");
+                        }
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.1,
@@ -152,5 +224,28 @@ class _SavedScreenState extends State<SavedScreen> {
               ),
       ),
     );
+  }
+
+  void _showSimpleDialog(int index) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            children: <Widget>[
+              ListTile(
+                onTap: () {
+                  _shareText(index);
+                },
+                leading: Icon(Icons.share, color: Colors.grey),
+                title: Text("Share"),
+              ),
+              ListTile(
+                onTap: () {},
+                leading: Icon(Icons.delete, color: Colors.grey),
+                title: Text("Delete"),
+              ),
+            ],
+          );
+        });
   }
 }

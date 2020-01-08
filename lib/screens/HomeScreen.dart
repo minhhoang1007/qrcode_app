@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -12,6 +12,7 @@ import 'package:qrcode_app/screens/HistoryScreen.dart';
 import 'package:qrcode_app/screens/NewQRScreen.dart';
 import 'package:qrcode_app/screens/ResultScreen.dart';
 import 'package:qrcode_app/screens/SavedScreen.dart';
+import 'package:qr_code_tools/qr_code_tools.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -22,29 +23,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File imageFile;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
   var qrText = "";
   bool flash;
   QRViewController controller;
+  AdmobBannerSize bannerSize;
+  AdmobInterstitial interstitialAd;
+  AdmobReward rewardAd;
 
   // truy cap thu vien anh
   void _openGallary(BuildContext context) async {
+    controller.pauseCamera();
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = picture;
-    });
-  }
-
-  //Quang Cao
-  BannerAd _bannerAd;
-  int _coins = 0;
-  BannerAd createBannerAd() {
-    return BannerAd(
-        adUnitId: bannerId,
-        size: AdSize.banner,
-        targetingInfo: ADS().targetingInfo,
-        listener: (MobileAdEvent event) {
-          print("BannerAd $event");
-        });
+    decode(picture.path);
   }
 
   bool isload = false;
@@ -52,57 +43,61 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     MyApp.platform.invokeMethod("rateAuto");
-    FirebaseAdMob.instance.initialize(
-      appId: bannerId,
+    bannerSize = AdmobBannerSize.BANNER;
+    interstitialAd = AdmobInterstitial(
+      adUnitId: interUnitId,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
     );
-    _bannerAd = createBannerAd()
-      ..load()
-      ..show(
-        anchorType: AnchorType.bottom,
-      );
-    RewardedVideoAd.instance
-        .load(adUnitId: videoId, targetingInfo: ADS().targetingInfo);
-    RewardedVideoAd.instance.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      print("RewardedVideoAd event $event");
-      if (event == RewardedVideoAdEvent.rewarded) {
-        setState(() {
-          _coins += rewardAmount;
+
+    rewardAd = AdmobReward(
+        adUnitId: videoId,
+        listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+          if (event == AdmobAdEvent.closed) {
+            rewardAd.load();
+          }
+          ;
+          handleEvent(event, args, 'Reward');
         });
-      }
-      if (event == RewardedVideoAdEvent.closed) {
-        setState(() {
-          isload = false;
-        });
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NewQRScreen(),
-            ));
-      }
-    };
+
+    interstitialAd.load();
+    rewardAd.load();
+
     Common.listhis = [];
     flash = false;
   }
 
-  //play video ads
-  playAd() {
-    if (_coins == 0) {
-      setState(() {
-        RewardedVideoAd.instance
-            .load(adUnitId: videoId, targetingInfo: ADS().targetingInfo);
-      });
-      RewardedVideoAd.instance.show();
-      print("Coins $_coins");
-    } else {
-      setState(() {
-        _coins += -1;
-        RewardedVideoAd.instance
-            .load(adUnitId: videoId, targetingInfo: ADS().targetingInfo);
-      });
-      print("Coins $_coins");
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        showSnackBar('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        showSnackBar('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        showSnackBar('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        showSnackBar('Admob $adType failed to load. :(');
+        break;
+      case AdmobAdEvent.rewarded:
+        // intent to screen
+        break;
+      default:
     }
   }
+
+  void showSnackBar(String content) {
+    scaffoldState.currentState.showSnackBar(SnackBar(
+      content: Text(content),
+      duration: Duration(milliseconds: 1500),
+    ));
+  }
+  //play video ads
 
   //Save history
   Future saveQR(String name) async {
@@ -132,10 +127,25 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  //Qr code image
+  Future decode(String file) async {
+    String data = await QrCodeToolsPlugin.decodeFrom(file);
+    qrText = data;
+    saveQR(qrText);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ResultScreen(
+                  id: qrText,
+                  callBack: () {
+                    controller.resumeCamera();
+                  },
+                )));
+  }
+
   @override
   void dispose() {
     super.dispose();
-    _bannerAd.dispose();
     controller?.dispose();
   }
 
@@ -189,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     border: Border.all(color: Colors.black),
                   ),
                   height: 200,
-                  width: MediaQuery.of(context).size.width * 0.32,
+                  width: MediaQuery.of(context).size.width * 0.35,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -204,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 20,
                       ),
                       Center(
-                        child: Text("  Use this function    forever!!!",
+                        child: Text("Use this function forever!!!",
                             style: TextStyle(fontSize: 13)),
                       ),
                       Text(
@@ -233,16 +243,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 10,
-                ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.black),
                   ),
                   height: 200,
-                  width: MediaQuery.of(context).size.width * 0.32,
+                  width: MediaQuery.of(context).size.width * 0.35,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -258,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Center(
                         child: Text(
-                          "  Get 2 times free to    generate!!!",
+                          "Get 2 times free to generate!!!",
                           style: TextStyle(fontSize: 13),
                         ),
                       ),
@@ -266,12 +273,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 20,
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           Navigator.of(context).pop();
                           setState(() {
                             isload = true;
                           });
-                          playAd();
+                          if (await rewardAd.isLoaded) {
+                            rewardAd.show();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NewQRScreen(),
+                                ));
+                          } else {
+                            showSnackBar("Interstitial ad is still loading...");
+                          }
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -345,9 +361,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: <Widget>[
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               print("Load video");
-              playAd();
+              if (await rewardAd.isLoaded) {
+                rewardAd.show();
+              } else {
+                showSnackBar("Interstitial ad is still loading...");
+              }
             },
             child: Container(
               height: 50,
@@ -383,7 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.55,
+            bottom: MediaQuery.of(context).size.height * 0.5,
             child: Container(
               padding: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width * 0.1,
@@ -398,10 +418,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.05,
+            bottom: MediaQuery.of(context).size.height * 0.1,
             child: Padding(
               padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.1,
+                left: MediaQuery.of(context).size.width * 0.05,
+                right: MediaQuery.of(context).size.width * 0.05,
               ),
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.1,
@@ -468,6 +489,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTap: () {
                         _openGallary(context);
+                        // decode(imageFile.path);
                       },
                       child: Column(
                         children: <Widget>[
@@ -521,6 +543,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.width * 1.4,
+            left: MediaQuery.of(context).size.width * 0.05,
+            right: MediaQuery.of(context).size.width * 0.05,
+            child: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(bottom: 20.0),
+              child: AdmobBanner(
+                adUnitId: bannerId,
+                adSize: bannerSize,
+                listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+                  handleEvent(event, args, 'Banner');
+                },
               ),
             ),
           ),

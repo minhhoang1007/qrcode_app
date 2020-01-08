@@ -1,5 +1,7 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:qrcode_app/common/Common.dart';
+import 'package:qrcode_app/config/ads.dart';
 import 'package:qrcode_app/main.dart';
 import 'package:qrcode_app/screens/ResultScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,8 +14,71 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
+  AdmobReward rewardAd;
   Future<Null> getString() async {
     Common.listhis = prefs.getStringList('list');
+  }
+
+  @override
+  void initState() {
+    rewardAd = AdmobReward(
+        adUnitId: videoId,
+        listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+          if (event == AdmobAdEvent.closed) rewardAd.load();
+          handleEvent(event, args, 'Reward');
+        });
+    rewardAd.load();
+    super.initState();
+  }
+
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        showSnackBar('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        showSnackBar('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        showSnackBar('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        showSnackBar('Admob $adType failed to load. :(');
+        break;
+      case AdmobAdEvent.rewarded:
+        showDialog(
+          context: scaffoldState.currentContext,
+          builder: (BuildContext context) {
+            return WillPopScope(
+              child: AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Reward callback fired. Thanks Andrew!'),
+                    Text('Type: ${args['type']}'),
+                    Text('Amount: ${args['amount']}'),
+                  ],
+                ),
+              ),
+              onWillPop: () async {
+                scaffoldState.currentState.hideCurrentSnackBar();
+                return true;
+              },
+            );
+          },
+        );
+        break;
+      default:
+    }
+  }
+
+  void showSnackBar(String content) {
+    scaffoldState.currentState.showSnackBar(SnackBar(
+      content: Text(content),
+      duration: Duration(milliseconds: 1500),
+    ));
   }
 
   @override
@@ -34,7 +99,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
             child: Text("History", style: TextStyle(color: Colors.white))),
         actions: <Widget>[
           GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              if (await rewardAd.isLoaded) {
+                rewardAd.show();
+              } else {
+                showSnackBar("Reward ad is still loading...");
+              }
+            },
             child: Container(
               height: 40,
               width: 40,

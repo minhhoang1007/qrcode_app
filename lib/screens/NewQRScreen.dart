@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qrcode_app/common/Common.dart';
+import 'package:qrcode_app/config/ads.dart';
 import 'package:qrcode_app/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -20,12 +23,10 @@ class _NewQRScreenState extends State<NewQRScreen> {
   GlobalKey _globalKey = GlobalKey();
   String hn;
   String textcode = "";
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  AdmobBannerSize bannerSize;
 
   void initState() {
+    bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
     _controller.addListener(() {
       print("value: ${_controller.text}");
       setState(() {
@@ -34,10 +35,14 @@ class _NewQRScreenState extends State<NewQRScreen> {
     });
     super.initState();
     hn = 'QRCode';
-    Common.img = [];
   }
 
-  Future<Null> saveQR() async {
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future saveQR() async {
     Common.img.add(textcode);
     return prefs.setStringList("listtwo", Common.img);
   }
@@ -46,6 +51,15 @@ class _NewQRScreenState extends State<NewQRScreen> {
     saveQR().then((value) {}, onError: (error) {
       print(error);
     });
+  }
+
+  //share
+  Future<void> _shareText() async {
+    try {
+      Share.text('ID Product: ', textcode, 'text/plain');
+    } catch (e) {
+      print('error: $e');
+    }
   }
 
   @override
@@ -99,6 +113,9 @@ class _NewQRScreenState extends State<NewQRScreen> {
                 ),
               ),
               GestureDetector(
+                onTap: () {
+                  _shareText();
+                },
                 child: Container(
                   height: 50,
                   width: 80,
@@ -138,100 +155,128 @@ class _NewQRScreenState extends State<NewQRScreen> {
         ),
       ),
       body: Container(
-        width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.black,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.1,
-                width: MediaQuery.of(context).size.width * 0.8,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.black,
                 ),
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 16),
-                    border: InputBorder.none,
-                    hintText: "Enter website, text,"
-                        "email,....",
-                    contentPadding: EdgeInsets.all(10),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1),
-              child: GestureDetector(
-                onTap: () {
-                  _showSimpleDialogHN();
-                },
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Center(
-                          child:
-                              Text(hn, style: TextStyle(color: Colors.black))),
-                      Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.orange,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.35),
-              child: GestureDetector(
-                onTap: () {
-                  _showDialogNew();
-                },
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Create",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.1),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: TextField(
+                          controller: _controller,
+                          decoration: InputDecoration(
+                            hintStyle: TextStyle(fontSize: 16),
+                            border: InputBorder.none,
+                            hintText: "Enter website, text,"
+                                "email,....",
+                            contentPadding: EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.1),
+                      child: GestureDetector(
+                        onTap: () {
+                          _showSimpleDialogHN();
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Center(
+                                  child: Text(hn,
+                                      style: TextStyle(color: Colors.black))),
+                              Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.orange,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.35),
+                      child: GestureDetector(
+                        onTap: () {
+                          _showDialogNew();
+                          _controller.clear();
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          decoration: BoxDecoration(
+                            color: Colors.orange,
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Create",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.15,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                ),
+                alignment: Alignment.center,
+                //height: MediaQuery.of(context).size.height * 0.2,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: AdmobBanner(
+                  adUnitId: bannerId,
+                  adSize: bannerSize,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
