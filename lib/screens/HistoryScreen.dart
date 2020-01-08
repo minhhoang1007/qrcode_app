@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qrcode_app/common/Common.dart';
 import 'package:qrcode_app/main.dart';
+import 'package:qrcode_app/screens/ResultScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -59,6 +60,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       child: Card(
                         color: Colors.grey,
                         child: ListTile(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ResultScreen(
+                                          id: Common.listhis[index],
+                                        )));
+                          },
                           leading: Common.listhis[index]
                                   .contains(new RegExp(r'[0-9]'))
                               ? Icon(

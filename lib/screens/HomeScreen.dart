@@ -212,7 +212,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(color: Colors.blue),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
                         child: Container(
                           height: 40,
                           width: 100,
