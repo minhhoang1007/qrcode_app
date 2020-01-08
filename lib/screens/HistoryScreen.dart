@@ -4,7 +4,6 @@ import 'package:qrcode_app/common/Common.dart';
 import 'package:qrcode_app/config/ads.dart';
 import 'package:qrcode_app/main.dart';
 import 'package:qrcode_app/screens/ResultScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryScreen extends StatefulWidget {
   HistoryScreen({Key key}) : super(key: key);
@@ -16,12 +15,14 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
   AdmobReward rewardAd;
+  AdmobBannerSize bannerSize;
   Future<Null> getString() async {
     Common.listhis = prefs.getStringList('list');
   }
 
   @override
   void initState() {
+    bannerSize = AdmobBannerSize.BANNER;
     rewardAd = AdmobReward(
         adUnitId: videoId,
         listener: (AdmobAdEvent event, Map<String, dynamic> args) {
@@ -118,47 +119,66 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ],
       ),
       body: Container(
+        decoration: BoxDecoration(
           color: Colors.black,
-          child: Common.listhis.length != 0
-              ? ListView.builder(
-                  itemCount: Common.listhis.length,
-                  itemBuilder: (context, int index) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.05,
-                        right: MediaQuery.of(context).size.width * 0.05,
-                      ),
-                      child: Card(
-                        color: Colors.grey,
-                        child: ListTile(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ResultScreen(
-                                          id: Common.listhis[index],
-                                        )));
-                          },
-                          leading: Common.listhis[index]
-                                  .contains(new RegExp(r'[0-9]'))
-                              ? Icon(
-                                  Icons.call,
-                                  color: Colors.green,
-                                )
-                              : Icon(
-                                  Icons.textsms,
-                                  color: Colors.white,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: Common.listhis.length != 0
+                      ? ListView.builder(
+                          itemCount: Common.listhis.length,
+                          itemBuilder: (context, int index) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.05,
+                                right: MediaQuery.of(context).size.width * 0.05,
+                              ),
+                              child: Card(
+                                color: Colors.grey,
+                                child: ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ResultScreen(
+                                                  id: Common.listhis[index],
+                                                )));
+                                  },
+                                  leading: Common.listhis[index]
+                                          .contains(new RegExp(r'[0-9]'))
+                                      ? Icon(
+                                          Icons.call,
+                                          color: Colors.green,
+                                        )
+                                      : Icon(
+                                          Icons.textsms,
+                                          color: Colors.white,
+                                        ),
+                                  title: Text(Common.listhis[index],
+                                      style: TextStyle(color: Colors.white)),
                                 ),
-                          title: Text(Common.listhis[index],
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text("No data",
                               style: TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                    );
-                  },
-                )
-              : Center(
-                  child: Text("No data", style: TextStyle(color: Colors.white)),
-                )),
+                        )),
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: AdmobBanner(
+                  adUnitId: bannerId,
+                  adSize: bannerSize,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

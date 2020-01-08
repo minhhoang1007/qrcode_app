@@ -237,7 +237,6 @@ class _NewQRScreenState extends State<NewQRScreen> {
                       child: GestureDetector(
                         onTap: () {
                           _showDialogNew();
-                          _controller.clear();
                         },
                         child: Container(
                           height: MediaQuery.of(context).size.height * 0.05,
