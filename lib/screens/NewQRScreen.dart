@@ -59,21 +59,52 @@ class _NewQRScreenState extends State<NewQRScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Container(
-              height: 300,
-              width: 300,
-              child: RepaintBoundary(
-                key: _globalKey,
-                child: QrImage(
-                  data: _controller.text,
-                  version: QrVersions.auto,
-                  size: 200.0,
+            title: Column(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.6),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(120),
+                      ),
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                Container(
+                  height: 200,
+                  width: 200,
+                  child: Center(
+                    child: RepaintBoundary(
+                      key: _globalKey,
+                      child: QrImage(
+                        data: _controller.text,
+                        version: QrVersions.auto,
+                        size: 200.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            content: Text("Create QR Code Successfully",
-                style: TextStyle(
-                    color: Colors.orange, fontWeight: FontWeight.bold)),
+            content: 
+             Text("Create QR Code Successfully",
+                  style: TextStyle(
+                      color: Colors.orange,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20)),
+            
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
