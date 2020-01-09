@@ -24,12 +24,6 @@ class _NewQRScreenState extends State<NewQRScreen> {
 
   void initState() {
     bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
-    _controller.addListener(() {
-      print("value: ${_controller.text}");
-      setState(() {
-        textcode = _controller.text;
-      });
-    });
     super.initState();
     hn = 'QRCode';
   }
@@ -39,15 +33,15 @@ class _NewQRScreenState extends State<NewQRScreen> {
     super.dispose();
   }
 
-  Future saveQR() async {
-    Common.img.add(textcode);
-    return prefs.setStringList("listtwo", Common.img);
-  }
-
   void runSave() {
-    saveQR().then((value) {}, onError: (error) {
-      print(error);
-    });
+    if (Common.img == null) Common.img = [];
+    Common.img.add(_controller.text);
+    print("qwertyuiop");
+    print(Common.img);
+    prefs
+        .setStringList(Common.LIST_TOW, Common.img)
+        .then((onValue) {})
+        .catchError((onError) {});
   }
 
   //share
@@ -152,6 +146,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
         ),
       ),
       body: Container(
+        height: MediaQuery.of(context).size.height * 1,
         decoration: BoxDecoration(
           color: Colors.black,
         ),

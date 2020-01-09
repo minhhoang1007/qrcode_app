@@ -8,7 +8,8 @@ import 'package:qrcode_app/main.dart';
 import 'package:qrcode_app/screens/NewQRScreen.dart';
 
 class SavedScreen extends StatefulWidget {
-  SavedScreen({Key key}) : super(key: key);
+  var callBack;
+  SavedScreen({Key key, this.callBack}) : super(key: key);
 
   @override
   _SavedScreenState createState() => _SavedScreenState();
@@ -18,17 +19,23 @@ class _SavedScreenState extends State<SavedScreen> {
   AdmobBannerSize bannerSize;
   AdmobReward rewardAd;
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
-  Future<Null> getString() async {
-    Common.img = prefs.getStringList('listtwo');
+  void getString() {
+    Common.img = prefs.getStringList(Common.LIST_TOW);
   }
 
-  Future<Null> removeValues(String nam) async {
-    prefs.remove("nam");
+  void removeValues(String nam) {
+    Common.img.remove(nam);
+    prefs.setStringList(Common.LIST_TOW, Common.img).then((onValue) {
+      if (onValue)
+        setState(() {
+          Common.img;
+        });
+    });
   }
 
   @override
   void initState() {
-    bannerSize = AdmobBannerSize.BANNER;
+    bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
     rewardAd = AdmobReward(
         adUnitId: videoId,
         listener: (AdmobAdEvent event, Map<String, dynamic> args) {
@@ -38,6 +45,7 @@ class _SavedScreenState extends State<SavedScreen> {
           handleEvent(event, args, 'Reward');
         });
     rewardAd.load();
+    getString();
     super.initState();
   }
 
@@ -102,6 +110,7 @@ class _SavedScreenState extends State<SavedScreen> {
   @override
   void dispose() {
     super.dispose();
+    widget.callBack();
   }
 
   @override
@@ -140,13 +149,14 @@ class _SavedScreenState extends State<SavedScreen> {
         ],
       ),
       body: Container(
+        height: MediaQuery.of(context).size.height * 1,
         color: Colors.black,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               Container(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Common.img.length != 0
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Common.img != null && Common.img.length != 0
                     ? ListView.builder(
                         itemCount: Common.img.length,
                         itemBuilder: (context, int index) {
@@ -235,7 +245,6 @@ class _SavedScreenState extends State<SavedScreen> {
               ),
               Container(
                 alignment: Alignment.bottomCenter,
-                height: MediaQuery.of(context).size.height * 0.1,
                 child: AdmobBanner(
                   adUnitId: bannerId,
                   adSize: bannerSize,

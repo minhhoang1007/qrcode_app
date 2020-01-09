@@ -44,13 +44,19 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    widget.callBack();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: GestureDetector(
           onTap: () {
-            widget.callBack();
             Navigator.of(context).pop();
           },
           child: Container(

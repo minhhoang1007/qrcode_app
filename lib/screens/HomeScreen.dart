@@ -97,9 +97,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   //Save history
-  Future saveQR(String name) async {
+  void saveQR(String name) async {
+    if (Common.listhis == null) Common.listhis = [];
     Common.listhis.add(name);
-    return prefs.setStringList("list", Common.listhis);
+    print("qwertyuiop");
+    print(Common.listhis);
+    prefs
+        .setStringList(Common.LIST_THIS, Common.listhis)
+        .then((onValue) {})
+        .catchError((onError) {});
   }
 
   //QR Code
@@ -118,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context) => ResultScreen(
                     id: qrText,
                     callBack: () {
+                      print("CALLBACK");
                       controller.resumeCamera();
                     },
                   )));
@@ -455,10 +462,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        controller.pauseCamera();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SavedScreen(),
+                              builder: (context) => SavedScreen(
+                                callBack: () {
+                                  controller.resumeCamera();
+                                },
+                              ),
                             ));
                       },
                       child: Column(

@@ -16,13 +16,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
   AdmobReward rewardAd;
   AdmobBannerSize bannerSize;
-  Future<Null> getString() async {
-    Common.listhis = prefs.getStringList('list');
+  void getString() {
+    Common.listhis = prefs.getStringList(Common.LIST_THIS);
   }
 
   @override
   void initState() {
-    bannerSize = AdmobBannerSize.BANNER;
+    super.initState();
+    getString();
+    bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
     rewardAd = AdmobReward(
         adUnitId: videoId,
         listener: (AdmobAdEvent event, Map<String, dynamic> args) {
@@ -30,7 +32,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
           handleEvent(event, args, 'Reward');
         });
     rewardAd.load();
-    super.initState();
   }
 
   void handleEvent(
@@ -119,6 +120,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ],
       ),
       body: Container(
+        height: MediaQuery.of(context).size.height * 1,
         decoration: BoxDecoration(
           color: Colors.black,
         ),
@@ -126,8 +128,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
           child: Column(
             children: <Widget>[
               Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  child: Common.listhis.length != 0
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child:  Common.img != null && Common.listhis.length != 0
                       ? ListView.builder(
                           itemCount: Common.listhis.length,
                           itemBuilder: (context, int index) {
@@ -173,7 +175,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         )),
               Container(
                 alignment: Alignment.bottomCenter,
-                height: MediaQuery.of(context).size.height * 0.1,
                 child: AdmobBanner(
                   adUnitId: bannerId,
                   adSize: bannerSize,

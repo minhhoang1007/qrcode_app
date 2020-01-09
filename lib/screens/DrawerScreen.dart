@@ -214,7 +214,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               decoration: BoxDecoration(
                 color: Colors.black,
               ),
-              alignment: Alignment.center,
+              alignment: Alignment.bottomCenter,
               child: AdmobBanner(
                 adUnitId: bannerId,
                 adSize: bannerSize,
