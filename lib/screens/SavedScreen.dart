@@ -22,6 +22,10 @@ class _SavedScreenState extends State<SavedScreen> {
     Common.img = prefs.getStringList('listtwo');
   }
 
+  Future removeValues(String nam) async {
+    prefs.remove("nam");
+  }
+
   @override
   void initState() {
     bannerSize = AdmobBannerSize.BANNER;
@@ -31,7 +35,6 @@ class _SavedScreenState extends State<SavedScreen> {
           if (event == AdmobAdEvent.closed) {
             rewardAd.load();
           }
-          ;
           handleEvent(event, args, 'Reward');
         });
     rewardAd.load();
@@ -39,9 +42,9 @@ class _SavedScreenState extends State<SavedScreen> {
   }
 
   //Share
-  Future<void> _shareText(int intdex) async {
+  Future<void> _shareText(String ind) async {
     try {
-      Share.text('ID Product: ', Common.img[intdex], 'text/plain');
+      Share.text('ID Product: ', ind, 'text/plain');
     } catch (e) {
       print('error: $e');
     }
@@ -156,7 +159,7 @@ class _SavedScreenState extends State<SavedScreen> {
                               color: Colors.grey,
                               child: ListTile(
                                 onTap: () {
-                                  _showSimpleDialog(index);
+                                  _showSimpleDialog(Common.img[index]);
                                 },
                                 leading: Container(
                                   color: Colors.white,
@@ -244,7 +247,7 @@ class _SavedScreenState extends State<SavedScreen> {
     );
   }
 
-  void _showSimpleDialog(int index) {
+  void _showSimpleDialog(String ind) {
     showDialog(
         context: context,
         builder: (context) {
@@ -252,13 +255,15 @@ class _SavedScreenState extends State<SavedScreen> {
             children: <Widget>[
               ListTile(
                 onTap: () {
-                  _shareText(index);
+                  _shareText(ind);
                 },
                 leading: Icon(Icons.share, color: Colors.grey),
                 title: Text("Share"),
               ),
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  _shareText(ind);
+                },
                 leading: Icon(Icons.delete, color: Colors.grey),
                 title: Text("Delete"),
               ),

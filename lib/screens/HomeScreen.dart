@@ -38,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
     decode(picture.path);
   }
 
-  bool isload = false;
   @override
   void initState() {
     super.initState();
@@ -58,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
           if (event == AdmobAdEvent.closed) {
             rewardAd.load();
           }
-          ;
           handleEvent(event, args, 'Reward');
         });
 
@@ -97,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
       duration: Duration(milliseconds: 1500),
     ));
   }
-  //play video ads
 
   //Save history
   Future saveQR(String name) async {
@@ -275,9 +272,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       GestureDetector(
                         onTap: () async {
                           Navigator.of(context).pop();
-                          setState(() {
-                            isload = true;
-                          });
                           if (await rewardAd.isLoaded) {
                             rewardAd.show();
                             Navigator.push(
@@ -489,7 +483,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTap: () {
                         _openGallary(context);
-                        // decode(imageFile.path);
                       },
                       child: Column(
                         children: <Widget>[

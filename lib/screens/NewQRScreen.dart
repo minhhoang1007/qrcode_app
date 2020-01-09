@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
@@ -195,7 +192,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -267,8 +264,6 @@ class _NewQRScreenState extends State<NewQRScreen> {
                   color: Colors.black,
                 ),
                 alignment: Alignment.center,
-                //height: MediaQuery.of(context).size.height * 0.2,
-                width: MediaQuery.of(context).size.width * 0.8,
                 child: AdmobBanner(
                   adUnitId: bannerId,
                   adSize: bannerSize,
