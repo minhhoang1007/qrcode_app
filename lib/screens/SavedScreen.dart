@@ -264,6 +264,7 @@ class _SavedScreenState extends State<SavedScreen> {
               ListTile(
                 onTap: () {
                   removeValues(ind);
+                  Navigator.of(context).pop();
                 },
                 leading: Icon(Icons.delete, color: Colors.grey),
                 title: Text("Delete"),
