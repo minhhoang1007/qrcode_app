@@ -47,7 +47,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
   //share
   Future<void> _shareText() async {
     try {
-      Share.text('ID Product: ', textcode, 'text/plain');
+      Share.text('ID Product: ', _controller.text, 'text/plain');
     } catch (e) {
       print('error: $e');
     }
