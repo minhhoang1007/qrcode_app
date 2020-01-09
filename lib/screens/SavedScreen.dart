@@ -22,7 +22,7 @@ class _SavedScreenState extends State<SavedScreen> {
     Common.img = prefs.getStringList('listtwo');
   }
 
-  Future removeValues(String nam) async {
+  Future<Null> removeValues(String nam) async {
     prefs.remove("nam");
   }
 
@@ -235,6 +235,7 @@ class _SavedScreenState extends State<SavedScreen> {
               ),
               Container(
                 alignment: Alignment.bottomCenter,
+                height: MediaQuery.of(context).size.height * 0.1,
                 child: AdmobBanner(
                   adUnitId: bannerId,
                   adSize: bannerSize,
@@ -262,7 +263,7 @@ class _SavedScreenState extends State<SavedScreen> {
               ),
               ListTile(
                 onTap: () {
-                  _shareText(ind);
+                  removeValues(ind);
                 },
                 leading: Icon(Icons.delete, color: Colors.grey),
                 title: Text("Delete"),

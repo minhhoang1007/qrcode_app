@@ -159,6 +159,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
           child: Column(
             children: <Widget>[
               Container(
+                height: MediaQuery.of(context).size.height * 0.4,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.black,
@@ -233,10 +234,19 @@ class _NewQRScreenState extends State<NewQRScreen> {
                           left: MediaQuery.of(context).size.width * 0.35),
                       child: GestureDetector(
                         onTap: () {
-                          _showDialogNew();
+                          _controller.text == ""
+                              ? Fluttertoast.showToast(
+                                  msg: "Text Null",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIos: 1,
+                                  backgroundColor: Colors.white,
+                                  textColor: Colors.orange,
+                                  fontSize: 16.0)
+                              : _showDialogNew();
                         },
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.05,
+                          height: MediaQuery.of(context).size.height * 0.06,
                           width: MediaQuery.of(context).size.width * 0.3,
                           decoration: BoxDecoration(
                             color: Colors.orange,

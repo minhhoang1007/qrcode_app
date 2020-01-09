@@ -240,6 +240,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  width: 5,
+                ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -540,7 +543,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.width * 1.4,
+            bottom: MediaQuery.of(context).size.width * 0.01,
             left: MediaQuery.of(context).size.width * 0.05,
             right: MediaQuery.of(context).size.width * 0.05,
             child: Container(

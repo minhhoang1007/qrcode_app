@@ -166,10 +166,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         )
                       : Center(
                           child: Text("No data",
-                              style: TextStyle(color: Colors.white)),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
                         )),
               Container(
                 alignment: Alignment.bottomCenter,
+                height: MediaQuery.of(context).size.height * 0.1,
                 child: AdmobBanner(
                   adUnitId: bannerId,
                   adSize: bannerSize,
