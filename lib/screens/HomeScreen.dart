@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   QRViewController controller;
   AdmobBannerSize bannerSize;
   AdmobInterstitial interstitialAd;
-  AdmobReward rewardAd;
 
   // truy cap thu vien anh
   void _openGallary(BuildContext context) async {
@@ -50,19 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         handleEvent(event, args, 'Interstitial');
       },
     );
-
-    rewardAd = AdmobReward(
-        adUnitId: videoId,
-        listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-          if (event == AdmobAdEvent.closed) {
-            rewardAd.load();
-          }
-          handleEvent(event, args, 'Reward');
-        });
-
     interstitialAd.load();
-    rewardAd.load();
-
     Common.listhis = [];
     flash = false;
   }
@@ -282,8 +269,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       GestureDetector(
                         onTap: () async {
                           Navigator.of(context).pop();
-                          if (await rewardAd.isLoaded) {
-                            rewardAd.show();
+                          if (await interstitialAd.isLoaded) {
+                            interstitialAd.show();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -367,8 +354,8 @@ class _HomeScreenState extends State<HomeScreen> {
           GestureDetector(
             onTap: () async {
               print("Load video");
-              if (await rewardAd.isLoaded) {
-                rewardAd.show();
+              if (await interstitialAd.isLoaded) {
+                interstitialAd.show();
               } else {
                 showSnackBar("Interstitial ad is still loading...");
               }
@@ -555,12 +542,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.width * 0.01,
-            left: MediaQuery.of(context).size.width * 0.05,
-            right: MediaQuery.of(context).size.width * 0.05,
+            bottom: 0,
+            left: 0,
+            right: 0,
             child: Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: 20.0),
               child: AdmobBanner(
                 adUnitId: bannerId,
                 adSize: bannerSize,

@@ -173,7 +173,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                         width: MediaQuery.of(context).size.width * 0.8,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: TextField(
                           controller: _controller,
@@ -202,7 +202,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                           width: MediaQuery.of(context).size.width * 0.25,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(6),
                           ),
                           child: Row(
                             children: <Widget>[

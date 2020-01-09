@@ -18,7 +18,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   String urlTest = 'https://flutter.dev';
   String urlChinhsach = 'https://flutter.dev';
   AdmobBannerSize bannerSize;
-  AdmobReward rewardAd;
+  AdmobInterstitial interstitialAd;
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
   _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -31,13 +31,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   void initState() {
     bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
-    rewardAd = AdmobReward(
-        adUnitId: videoId,
-        listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-          if (event == AdmobAdEvent.closed) rewardAd.load();
-          handleEvent(event, args, 'Reward');
-        });
-    rewardAd.load();
+    interstitialAd = AdmobInterstitial(
+      adUnitId: interUnitId,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
+    );
+    interstitialAd.load();
     super.initState();
   }
 
@@ -57,27 +58,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
         showSnackBar('Admob $adType failed to load. :(');
         break;
       case AdmobAdEvent.rewarded:
-        showDialog(
-          context: scaffoldState.currentContext,
-          builder: (BuildContext context) {
-            return WillPopScope(
-              child: AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text('Reward callback fired. Thanks Andrew!'),
-                    Text('Type: ${args['type']}'),
-                    Text('Amount: ${args['amount']}'),
-                  ],
-                ),
-              ),
-              onWillPop: () async {
-                scaffoldState.currentState.hideCurrentSnackBar();
-                return true;
-              },
-            );
-          },
-        );
         break;
       default:
     }
@@ -113,7 +93,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
         child: Column(
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.height * 0.45,
+              height: MediaQuery.of(context).size.height * 0.5,
               color: Colors.black,
               child: ListView(
                 children: <Widget>[
@@ -135,8 +115,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   ),
                   ListTile(
                     onTap: () async {
-                      if (await rewardAd.isLoaded) {
-                        rewardAd.show();
+                      if (await interstitialAd.isLoaded) {
+                        interstitialAd.show();
                       } else {
                         showSnackBar("Reward ad is still loading...");
                       }

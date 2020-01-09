@@ -17,7 +17,7 @@ class SavedScreen extends StatefulWidget {
 
 class _SavedScreenState extends State<SavedScreen> {
   AdmobBannerSize bannerSize;
-  AdmobReward rewardAd;
+  AdmobInterstitial interstitialAd;
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
   void getString() {
     Common.img = prefs.getStringList(Common.LIST_TOW);
@@ -36,15 +36,14 @@ class _SavedScreenState extends State<SavedScreen> {
   @override
   void initState() {
     bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
-    rewardAd = AdmobReward(
-        adUnitId: videoId,
-        listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-          if (event == AdmobAdEvent.closed) {
-            rewardAd.load();
-          }
-          handleEvent(event, args, 'Reward');
-        });
-    rewardAd.load();
+    interstitialAd = AdmobInterstitial(
+      adUnitId: interUnitId,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
+    );
+    interstitialAd.load();
     getString();
     super.initState();
   }
@@ -69,32 +68,12 @@ class _SavedScreenState extends State<SavedScreen> {
         break;
       case AdmobAdEvent.closed:
         showSnackBar('Admob $adType Ad closed!');
+
         break;
       case AdmobAdEvent.failedToLoad:
         showSnackBar('Admob $adType failed to load. :(');
         break;
       case AdmobAdEvent.rewarded:
-        showDialog(
-          context: scaffoldState.currentContext,
-          builder: (BuildContext context) {
-            return WillPopScope(
-              child: AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text('Reward callback fired. Thanks Andrew!'),
-                    Text('Type: ${args['type']}'),
-                    Text('Amount: ${args['amount']}'),
-                  ],
-                ),
-              ),
-              onWillPop: () async {
-                scaffoldState.currentState.hideCurrentSnackBar();
-                return true;
-              },
-            );
-          },
-        );
         break;
       default:
     }
@@ -110,6 +89,7 @@ class _SavedScreenState extends State<SavedScreen> {
   @override
   void dispose() {
     super.dispose();
+    interstitialAd.dispose();
     widget.callBack();
   }
 
@@ -137,8 +117,8 @@ class _SavedScreenState extends State<SavedScreen> {
               color: Colors.white,
             ),
             onPressed: () async {
-              if (await rewardAd.isLoaded) {
-                rewardAd.show();
+              if (await interstitialAd.isLoaded) {
+                interstitialAd.show();
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => NewQRScreen()));
               } else {
@@ -211,8 +191,8 @@ class _SavedScreenState extends State<SavedScreen> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                if (await rewardAd.isLoaded) {
-                                  rewardAd.show();
+                                if (await interstitialAd.isLoaded) {
+                                  interstitialAd.show();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

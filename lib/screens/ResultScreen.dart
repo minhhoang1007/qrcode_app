@@ -16,9 +16,12 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
   String urlSearch;
   String urlWeb;
   AdmobBannerSize bannerSize;
+
+  AdmobInterstitial interstitialAd;
   Future<void> _shareText() async {
     try {
       Share.text('ID Product: ', widget.id, 'text/plain');
@@ -29,10 +32,46 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   void initState() {
+    super.initState();
     urlSearch = 'https://www.google.com/search?q=${widget.id}';
     urlWeb = 'https://${widget.id}';
     bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
-    super.initState();
+    interstitialAd = AdmobInterstitial(
+      adUnitId: interUnitId,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
+    );
+    interstitialAd.load();
+  }
+
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        showSnackBar('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        showSnackBar('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        showSnackBar('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        showSnackBar('Admob $adType failed to load. :(');
+        break;
+      case AdmobAdEvent.rewarded:
+        break;
+      default:
+    }
+  }
+
+  void showSnackBar(String content) {
+    scaffoldState.currentState.showSnackBar(SnackBar(
+      content: Text(content),
+      duration: Duration(milliseconds: 1500),
+    ));
   }
 
   _launchURL(String url) async {
@@ -45,7 +84,6 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     widget.callBack();
   }
@@ -60,8 +98,8 @@ class _ResultScreenState extends State<ResultScreen> {
             Navigator.of(context).pop();
           },
           child: Container(
-            height: 30,
-            width: 30,
+            height: 40,
+            width: 40,
             child: Icon(
               Icons.home,
               color: Colors.white,
@@ -70,7 +108,13 @@ class _ResultScreenState extends State<ResultScreen> {
         ),
         actions: <Widget>[
           GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              if (await interstitialAd.isLoaded) {
+                interstitialAd.show();
+              } else {
+                showSnackBar("Reward ad is still loading...");
+              }
+            },
             child: Container(
               height: 50,
               width: 50,

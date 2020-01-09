@@ -14,7 +14,7 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
-  AdmobReward rewardAd;
+  AdmobInterstitial interstitialAd;
   AdmobBannerSize bannerSize;
   void getString() {
     Common.listhis = prefs.getStringList(Common.LIST_THIS);
@@ -25,13 +25,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
     super.initState();
     getString();
     bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
-    rewardAd = AdmobReward(
-        adUnitId: videoId,
-        listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-          if (event == AdmobAdEvent.closed) rewardAd.load();
-          handleEvent(event, args, 'Reward');
-        });
-    rewardAd.load();
+    interstitialAd = AdmobInterstitial(
+      adUnitId: interUnitId,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
+    );
+    interstitialAd.load();
   }
 
   void handleEvent(
@@ -50,27 +51,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
         showSnackBar('Admob $adType failed to load. :(');
         break;
       case AdmobAdEvent.rewarded:
-        showDialog(
-          context: scaffoldState.currentContext,
-          builder: (BuildContext context) {
-            return WillPopScope(
-              child: AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text('Reward callback fired. Thanks Andrew!'),
-                    Text('Type: ${args['type']}'),
-                    Text('Amount: ${args['amount']}'),
-                  ],
-                ),
-              ),
-              onWillPop: () async {
-                scaffoldState.currentState.hideCurrentSnackBar();
-                return true;
-              },
-            );
-          },
-        );
         break;
       default:
     }
@@ -102,8 +82,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
         actions: <Widget>[
           GestureDetector(
             onTap: () async {
-              if (await rewardAd.isLoaded) {
-                rewardAd.show();
+              if (await interstitialAd.isLoaded) {
+                interstitialAd.show();
               } else {
                 showSnackBar("Reward ad is still loading...");
               }
@@ -129,7 +109,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             children: <Widget>[
               Container(
                   height: MediaQuery.of(context).size.height * 0.5,
-                  child:  Common.img != null && Common.listhis.length != 0
+                  child: Common.listhis != null && Common.listhis.length != 0
                       ? ListView.builder(
                           itemCount: Common.listhis.length,
                           itemBuilder: (context, int index) {
