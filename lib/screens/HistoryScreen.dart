@@ -100,68 +100,68 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ],
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height * 1,
         decoration: BoxDecoration(
           color: Colors.black,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: Common.listhis != null && Common.listhis.length != 0
-                      ? ListView.builder(
-                          itemCount: Common.listhis.length,
-                          itemBuilder: (context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.05,
-                                right: MediaQuery.of(context).size.width * 0.05,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+                flex: 3,
+                child: Common.listhis != null && Common.listhis.length != 0
+                    ? ListView.builder(
+                        itemCount: Common.listhis.length,
+                        itemBuilder: (context, int index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.05,
+                              right: MediaQuery.of(context).size.width * 0.05,
+                            ),
+                            child: Card(
+                              color: Colors.grey,
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ResultScreen(
+                                                id: Common.listhis[index],
+                                              )));
+                                },
+                                leading: Common.listhis[index]
+                                        .contains(new RegExp(r'[0-9]'))
+                                    ? Icon(
+                                        Icons.call,
+                                        color: Colors.green,
+                                      )
+                                    : Icon(
+                                        Icons.textsms,
+                                        color: Colors.white,
+                                      ),
+                                title: Text(Common.listhis[index],
+                                    style: TextStyle(color: Colors.white)),
                               ),
-                              child: Card(
-                                color: Colors.grey,
-                                child: ListTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ResultScreen(
-                                                  id: Common.listhis[index],
-                                                )));
-                                  },
-                                  leading: Common.listhis[index]
-                                          .contains(new RegExp(r'[0-9]'))
-                                      ? Icon(
-                                          Icons.call,
-                                          color: Colors.green,
-                                        )
-                                      : Icon(
-                                          Icons.textsms,
-                                          color: Colors.white,
-                                        ),
-                                  title: Text(Common.listhis[index],
-                                      style: TextStyle(color: Colors.white)),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : Center(
-                          child: Text("No data",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold)),
-                        )),
-              Container(
+                            ),
+                          );
+                        },
+                      )
+                    : Center(
+                        child: Text("No data",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      )),
+            Expanded(
+              flex: 2,
+              child: Container(
                 alignment: Alignment.bottomCenter,
                 child: AdmobBanner(
                   adUnitId: bannerId,
                   adSize: bannerSize,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

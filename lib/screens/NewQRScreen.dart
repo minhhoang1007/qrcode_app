@@ -98,13 +98,11 @@ class _NewQRScreenState extends State<NewQRScreen> {
                 ),
               ],
             ),
-            content: 
-             Text("Create QR Code Successfully",
-                  style: TextStyle(
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20)),
-            
+            content: Text("Create QR Code Successfully",
+                style: TextStyle(
+                    color: Colors.orange,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
             actions: <Widget>[
               GestureDetector(
                 onTap: () {

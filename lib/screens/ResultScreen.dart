@@ -135,11 +135,8 @@ class _ResultScreenState extends State<ResultScreen> {
         ),
         child: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.black,
-              ),
+            Expanded(
+              flex: 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -328,14 +325,14 @@ class _ResultScreenState extends State<ResultScreen> {
                 ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-              ),
-              alignment: Alignment.center,
-              child: AdmobBanner(
-                adUnitId: bannerId,
-                adSize: bannerSize,
+            Expanded(
+              flex: 2,
+              child: Container(
+                alignment: Alignment.center,
+                child: AdmobBanner(
+                  adUnitId: bannerId,
+                  adSize: bannerSize,
+                ),
               ),
             ),
           ],

@@ -92,9 +92,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
         decoration: BoxDecoration(color: Colors.black),
         child: Column(
           children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height * 0.5,
-              color: Colors.black,
+            Expanded(
+              flex: 3,
               child: ListView(
                 children: <Widget>[
                   ListTile(
@@ -190,14 +189,17 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-              ),
-              alignment: Alignment.bottomCenter,
-              child: AdmobBanner(
-                adUnitId: bannerId,
-                adSize: bannerSize,
+            Expanded(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                ),
+                alignment: Alignment.bottomCenter,
+                child: AdmobBanner(
+                  adUnitId: bannerId,
+                  adSize: bannerSize,
+                ),
               ),
             ),
           ],

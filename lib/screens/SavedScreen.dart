@@ -129,109 +129,107 @@ class _SavedScreenState extends State<SavedScreen> {
         ],
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height * 1,
         color: Colors.black,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: Common.img != null && Common.img.length != 0
-                    ? ListView.builder(
-                        itemCount: Common.img.length,
-                        itemBuilder: (context, int index) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05,
-                            ),
-                            child: Card(
-                              color: Colors.grey,
-                              child: ListTile(
-                                onTap: () {
-                                  _showSimpleDialog(Common.img[index]);
-                                },
-                                leading: Container(
-                                  color: Colors.white,
-                                  child: QrImage(
-                                    data: Common.img[index],
-                                    version: QrVersions.auto,
-                                    size: 50.0,
-                                  ),
-                                ),
-                                title: Text(Common.img[index],
-                                    style: TextStyle(color: Colors.white)),
-                                trailing: Icon(
-                                  Icons.more_vert,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    : Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.05),
-                              child: Text(
-                                  "Please create a QR code to receive results",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1,
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                if (await interstitialAd.isLoaded) {
-                                  interstitialAd.show();
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => NewQRScreen()));
-                                } else {
-                                  showSnackBar(
-                                      "Interstitial ad is still loading...");
-                                }
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Common.img != null && Common.img.length != 0
+                  ? ListView.builder(
+                      itemCount: Common.img.length,
+                      itemBuilder: (context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.05,
+                            right: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                          child: Card(
+                            color: Colors.grey,
+                            child: ListTile(
+                              onTap: () {
+                                _showSimpleDialog(Common.img[index]);
                               },
-                              child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.1,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                decoration: BoxDecoration(
-                                  color: Colors.orange,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Center(
-                                  child: Text("Start create code",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
+                              leading: Container(
+                                color: Colors.white,
+                                child: QrImage(
+                                  data: Common.img[index],
+                                  version: QrVersions.auto,
+                                  size: 50.0,
                                 ),
                               ),
+                              title: Text(Common.img[index],
+                                  style: TextStyle(color: Colors.white)),
+                              trailing: Icon(
+                                Icons.more_vert,
+                                color: Colors.white,
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.05),
+                            child: Text(
+                                "Please create a QR code to receive results",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20)),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              if (await interstitialAd.isLoaded) {
+                                interstitialAd.show();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => NewQRScreen()));
+                              } else {
+                                showSnackBar(
+                                    "Interstitial ad is still loading...");
+                              }
+                            },
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              decoration: BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(
+                                child: Text("Start create code",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-              ),
-              Container(
+                    ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
                 alignment: Alignment.bottomCenter,
                 child: AdmobBanner(
                   adUnitId: bannerId,
                   adSize: bannerSize,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
