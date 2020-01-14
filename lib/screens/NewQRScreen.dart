@@ -38,10 +38,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
     Common.img.add(_controller.text);
     print("qwertyuiop");
     print(Common.img);
-    prefs
-        .setStringList(Common.LIST_TOW, Common.img)
-        .then((onValue) {})
-        .catchError((onError) {});
+    prefs.setStringList(Common.LIST_TOW, Common.img).then((onValue) {}).catchError((onError) {});
   }
 
   //share
@@ -59,28 +56,31 @@ class _NewQRScreenState extends State<NewQRScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),
             title: Column(
               children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.6),
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(120),
-                      ),
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.white,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        padding: EdgeInsets.all(0.0),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(120),
+                        ),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
                 Container(
                   height: 200,
@@ -99,10 +99,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
               ],
             ),
             content: Text("Create QR Code Successfully",
-                style: TextStyle(
-                    color: Colors.orange,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20)),
+                style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 20)),
             actions: <Widget>[
               GestureDetector(
                 onTap: () {
@@ -118,17 +115,12 @@ class _NewQRScreenState extends State<NewQRScreen> {
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  height: 50,
+                  height: 40,
                   width: 80,
-                  decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(5)),
                   child: Center(
-                    child: Text("Save",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20)),
+                    child:
+                        Text("Save", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
                   ),
                 ),
               ),
@@ -137,17 +129,12 @@ class _NewQRScreenState extends State<NewQRScreen> {
                   _shareText();
                 },
                 child: Container(
-                  height: 50,
+                  height: 40,
                   width: 80,
-                  decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(5)),
                   child: Center(
-                    child: Text("Share",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20)),
+                    child:
+                        Text("Share", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
                   ),
                 ),
               ),
@@ -195,8 +182,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                       height: MediaQuery.of(context).size.height * 0.02,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.1),
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.1,
                         width: MediaQuery.of(context).size.width * 0.8,
@@ -220,8 +206,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                       height: 20,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.1),
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
                       child: GestureDetector(
                         onTap: () {
                           _showSimpleDialogHN();
@@ -238,9 +223,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                               SizedBox(
                                 width: 5,
                               ),
-                              Center(
-                                  child: Text(hn,
-                                      style: TextStyle(color: Colors.black))),
+                              Center(child: Text(hn, style: TextStyle(color: Colors.black))),
                               Icon(
                                 Icons.arrow_drop_down,
                                 color: Colors.orange,
@@ -254,13 +237,12 @@ class _NewQRScreenState extends State<NewQRScreen> {
                       height: 50,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.35),
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.35),
                       child: GestureDetector(
                         onTap: () {
                           _controller.text == ""
                               ? Fluttertoast.showToast(
-                                  msg: "Text Null",
+                                  msg: "Please enter text!",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIos: 1,
@@ -279,9 +261,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                           child: Center(
                             child: Text(
                               "Create",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -315,8 +295,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
         context: context,
         builder: (context) {
           return SimpleDialog(
-            title: Text('Lựa chọn định dạng',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            title: Text('Choose a format', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () {

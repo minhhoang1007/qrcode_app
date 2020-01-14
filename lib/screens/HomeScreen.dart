@@ -54,8 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     flash = false;
   }
 
-  void handleEvent(
-      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+  void handleEvent(AdmobAdEvent event, Map<String, dynamic> args, String adType) {
     switch (event) {
       case AdmobAdEvent.loaded:
         showSnackBar('New Admob $adType Ad loaded!');
@@ -89,10 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Common.listhis.add(name);
     print("qwertyuiop");
     print(Common.listhis);
-    prefs
-        .setStringList(Common.LIST_THIS, Common.listhis)
-        .then((onValue) {})
-        .catchError((onError) {});
+    prefs.setStringList(Common.LIST_THIS, Common.listhis).then((onValue) {}).catchError((onError) {});
   }
 
   //QR Code
@@ -186,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.black),
                   ),
                   height: 200,
@@ -197,16 +193,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                          height: 70,
-                          width: 70,
-                          child: Image.asset("assets/images/tien.jpg")),
+                      Container(height: 70, width: 70, child: Image.asset("assets/images/tien.jpg")),
                       SizedBox(
                         height: 20,
                       ),
                       Center(
-                        child: Text("Use this function forever!!!",
-                            style: TextStyle(fontSize: 13)),
+                        child: Text(
+                          "Use this function forever!!!",
+                          style: TextStyle(fontSize: 13),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       Text(
                         "15.000 đ",
@@ -217,11 +213,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.of(context).pop();
                         },
                         child: Container(
-                          height: 40,
+                          height: 35,
                           width: 100,
                           decoration: BoxDecoration(
                             color: Colors.green,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           child: Center(
                             child: Text(
@@ -239,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.black),
                   ),
                   height: 200,
@@ -250,18 +246,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                          height: 70,
-                          width: 70,
-                          child: Image.asset("assets/images/play.jpg")),
+                      Container(height: 70, width: 70, child: Image.asset("assets/images/play.jpg")),
                       SizedBox(
                         height: 20,
                       ),
                       Center(
-                        child: Text(
-                          "Get 2 times free to generate!!!",
-                          style: TextStyle(fontSize: 13),
-                        ),
+                        child: Text("Get 2 times free to generate!!!",
+                            style: TextStyle(fontSize: 13), textAlign: TextAlign.center),
                       ),
                       SizedBox(
                         height: 20,
@@ -282,11 +273,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          height: 40,
+                          height: 35,
                           width: 110,
                           decoration: BoxDecoration(
                             color: Colors.orange,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           child: Center(
                             child: Text(
@@ -328,8 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         title: Padding(
-          padding:
-              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.3),
+          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.3),
           child: GestureDetector(
             onTap: () {
               flash ? controller.toggleFlash() : Container();
@@ -397,8 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: MediaQuery.of(context).size.height * 0.5,
             child: Container(
               padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1,
-                  right: MediaQuery.of(context).size.width * 0.1),
+                  left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
               width: MediaQuery.of(context).size.width * 1,
               height: MediaQuery.of(context).size.height * 0.05,
               child: Center(
@@ -439,8 +428,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Text("Generate",
-                              style: TextStyle(color: Colors.white))
+                          Text("Generate", style: TextStyle(color: Colors.white))
                         ],
                       ),
                     ),
@@ -501,8 +489,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Text("Scan Photo",
-                              style: TextStyle(color: Colors.white))
+                          Text("Scan Photo", style: TextStyle(color: Colors.white))
                         ],
                       ),
                     ),
