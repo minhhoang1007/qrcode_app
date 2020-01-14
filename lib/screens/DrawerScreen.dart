@@ -42,8 +42,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     super.initState();
   }
 
-  void handleEvent(
-      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+  void handleEvent(AdmobAdEvent event, Map<String, dynamic> args, String adType) {
     switch (event) {
       case AdmobAdEvent.loaded:
         showSnackBar('New Admob $adType Ad loaded!');
@@ -93,15 +92,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 3,
               child: ListView(
                 children: <Widget>[
                   ListTile(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HistoryScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
                     },
                     leading: Icon(
                       Icons.history,
@@ -189,17 +184,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 ],
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                ),
-                alignment: Alignment.bottomCenter,
-                child: AdmobBanner(
-                  adUnitId: bannerId,
-                  adSize: bannerSize,
-                ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+              ),
+              alignment: Alignment.bottomCenter,
+              child: AdmobBanner(
+                adUnitId: bannerId,
+                adSize: bannerSize,
               ),
             ),
           ],

@@ -8,7 +8,8 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="qrcode_app"
+        android:label="QR scanner"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
