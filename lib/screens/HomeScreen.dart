@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,8 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     flash = false;
   }
 
-  void handleEvent(
-      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+  void handleEvent(AdmobAdEvent event, Map<String, dynamic> args, String adType) {
     switch (event) {
       case AdmobAdEvent.loaded:
         showSnackBar('New Admob $adType Ad loaded!');
@@ -89,10 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Common.listhis.add(name);
     print("qwertyuiop");
     print(Common.listhis);
-    prefs
-        .setStringList(Common.LIST_THIS, Common.listhis)
-        .then((onValue) {})
-        .catchError((onError) {});
+    prefs.setStringList(Common.LIST_THIS, Common.listhis).then((onValue) {}).catchError((onError) {});
   }
 
   //QR Code
@@ -197,10 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                          height: 70,
-                          width: 70,
-                          child: Image.asset("assets/images/tien.jpg")),
+                      Container(height: 70, width: 70, child: Image.asset("assets/images/tien.jpg")),
                       SizedBox(
                         height: 20,
                       ),
@@ -253,17 +247,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                          height: 70,
-                          width: 70,
-                          child: Image.asset("assets/images/play.jpg")),
+                      Container(height: 70, width: 70, child: Image.asset("assets/images/play.jpg")),
                       SizedBox(
                         height: 20,
                       ),
                       Center(
                         child: Text("Get 2 times free to generate!!!",
-                            style: TextStyle(fontSize: 13),
-                            textAlign: TextAlign.center),
+                            style: TextStyle(fontSize: 13), textAlign: TextAlign.center),
                       ),
                       SizedBox(
                         height: 20,
@@ -330,8 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         title: Padding(
-          padding:
-              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.3),
+          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.3),
           child: GestureDetector(
             onTap: () {
               flash ? controller.toggleFlash() : Container();
@@ -399,8 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: MediaQuery.of(context).size.height * 0.5,
             child: Container(
               padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1,
-                  right: MediaQuery.of(context).size.width * 0.1),
+                  left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
               width: MediaQuery.of(context).size.width * 1,
               height: MediaQuery.of(context).size.height * 0.05,
               child: Center(
@@ -411,144 +399,129 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.1,
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.05,
-                right: MediaQuery.of(context).size.width * 0.05,
-              ),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        _showDialogNew();
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(60),
-                              color: Colors.black54,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
+            bottom: 70,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      _showDialogNew();
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60),
+                            color: Colors.black54,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
                             ),
                           ),
-                          Text("Generate",
-                              style: TextStyle(color: Colors.white))
-                        ],
-                      ),
+                        ),
+                        Text("Generate", style: TextStyle(color: Colors.white))
+                      ],
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      var rng = new Random();
+                      if (rng.nextInt(10) <= 5) {
                         if (await interstitialAd.isLoaded) {
                           interstitialAd.show();
                         } else {
                           showSnackBar("Interstitial ad is still loading...");
                         }
-                        controller.pauseCamera();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SavedScreen(
-                                callBack: () {
-                                  controller.resumeCamera();
-                                },
-                              ),
-                            ));
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(60),
-                              color: Colors.black54,
+                      }
+
+                      controller.pauseCamera();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SavedScreen(
+                              callBack: () {
+                                controller.resumeCamera();
+                              },
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.save,
-                                color: Colors.white,
-                              ),
+                          ));
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60),
+                            color: Colors.black54,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.save,
+                              color: Colors.white,
                             ),
                           ),
-                          Text("Saved", style: TextStyle(color: Colors.white))
-                        ],
-                      ),
+                        ),
+                        Text("Saved", style: TextStyle(color: Colors.white))
+                      ],
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _openGallary(context);
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(60),
-                              color: Colors.black54,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.image,
-                                color: Colors.white,
-                              ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _openGallary(context);
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60),
+                            color: Colors.black54,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.image,
+                              color: Colors.white,
                             ),
                           ),
-                          Text("Scan Photo",
-                              style: TextStyle(color: Colors.white))
-                        ],
-                      ),
+                        ),
+                        Text("Scan Photo", style: TextStyle(color: Colors.white))
+                      ],
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        if (await interstitialAd.isLoaded) {
-                          interstitialAd.show();
-                        } else {
-                          showSnackBar("Interstitial ad is still loading...");
-                        }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HistoryScreen()));
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(60),
-                              color: Colors.black54,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.history,
-                                color: Colors.white,
-                              ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      if (await interstitialAd.isLoaded) {
+                        interstitialAd.show();
+                      } else {
+                        showSnackBar("Interstitial ad is still loading...");
+                      }
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60),
+                            color: Colors.black54,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.history,
+                              color: Colors.white,
                             ),
                           ),
-                          Text("History", style: TextStyle(color: Colors.white))
-                        ],
-                      ),
+                        ),
+                        Text("History", style: TextStyle(color: Colors.white))
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
