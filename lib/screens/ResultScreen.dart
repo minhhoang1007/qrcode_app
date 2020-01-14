@@ -47,7 +47,8 @@ class _ResultScreenState extends State<ResultScreen> {
     interstitialAd.load();
   }
 
-  void handleEvent(AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
     switch (event) {
       case AdmobAdEvent.loaded:
         showSnackBar('New Admob $adType Ad loaded!');
@@ -146,7 +147,8 @@ class _ResultScreenState extends State<ResultScreen> {
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.1),
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.1,
                       width: MediaQuery.of(context).size.width * 0.8,
@@ -173,7 +175,8 @@ class _ResultScreenState extends State<ResultScreen> {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                Clipboard.setData(ClipboardData(text: widget.id));
+                                Clipboard.setData(
+                                    ClipboardData(text: widget.id));
                                 Fluttertoast.showToast(
                                     msg: "Copied to clipboard",
                                     toastLength: Toast.LENGTH_SHORT,
@@ -246,7 +249,8 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               ),
                             ),
-                            Text("Search", style: TextStyle(color: Colors.white))
+                            Text("Search",
+                                style: TextStyle(color: Colors.white))
                           ],
                         ),
                         Column(
@@ -318,6 +322,11 @@ class _ResultScreenState extends State<ResultScreen> {
                       onTap: () {
                         widget.callBack();
                         Navigator.of(context).pop();
+
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => HomeScreen()));
                       },
                       child: Column(
                         children: <Widget>[
@@ -339,7 +348,10 @@ class _ResultScreenState extends State<ResultScreen> {
                           ),
                           Text(
                             "Scan new",
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
                           ),
                         ],
                       ),
