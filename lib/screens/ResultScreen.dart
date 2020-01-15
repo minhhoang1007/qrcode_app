@@ -290,6 +290,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     alignment: Alignment.center,
                     child: GestureDetector(
                       onTap: () {
+                        widget.callBack();
                         Navigator.of(context).pop();
                       },
                       child: Column(
