@@ -20,14 +20,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
   AdmobBannerSize bannerSize;
   AdmobInterstitial interstitialAd;
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   void initState() {
     bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
@@ -40,6 +32,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
     );
     interstitialAd.load();
     super.initState();
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void handleEvent(
@@ -77,6 +77,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -189,17 +191,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 ],
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                ),
-                alignment: Alignment.bottomCenter,
-                child: AdmobBanner(
-                  adUnitId: bannerId,
-                  adSize: bannerSize,
-                ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                color: Colors.black,
+              ),
+              alignment: Alignment.bottomCenter,
+              child: AdmobBanner(
+                adUnitId: bannerId,
+                adSize: bannerSize,
               ),
             ),
           ],

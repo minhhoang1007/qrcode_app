@@ -29,14 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   QRViewController controller;
   AdmobBannerSize bannerSize;
   AdmobInterstitial interstitialAd;
-
-  // truy cap thu vien anh
-  void _openGallary(BuildContext context) async {
-    controller.pauseCamera();
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    decode(picture.path);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -52,6 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
     interstitialAd.load();
     Common.listhis = [];
     flash = false;
+  }
+
+  // truy cap thu vien anh
+  void _openGallary(BuildContext context) async {
+    controller.pauseCamera();
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    decode(picture.path);
   }
 
   void handleEvent(
@@ -132,12 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     controller.resumeCamera();
                   },
                 )));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller?.dispose();
   }
 
   //Dialog
@@ -306,7 +299,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    controller?.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -328,8 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         title: Padding(
-          padding:
-              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.3),
+          padding: EdgeInsets.only(left: width * 0.3),
           child: GestureDetector(
             onTap: () {
               flash ? controller.toggleFlash() : Container();
@@ -394,31 +394,31 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.5,
+            bottom: height * 0.5 + 25,
             child: Container(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1,
-                  right: MediaQuery.of(context).size.width * 0.1),
-              width: MediaQuery.of(context).size.width * 1,
-              height: MediaQuery.of(context).size.height * 0.05,
-              child: Center(
-                child: Divider(
-                  color: Colors.red,
+              alignment: Alignment.center,
+              width: width,
+              child: Container(
+                width: 300,
+                child: Center(
+                  child: Divider(
+                    color: Colors.red,
+                  ),
                 ),
               ),
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.1,
+            bottom: height * 0.1,
             child: Padding(
               padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.05,
-                right: MediaQuery.of(context).size.width * 0.05,
+                left: width * 0.05,
+                right: width * 0.05,
               ),
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.1,
+                height: height * 0.1,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
@@ -432,7 +432,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.black54,
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
                               child: Icon(
                                 Icons.add,
                                 color: Colors.white,
@@ -445,20 +445,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
+                      width: width * 0.1,
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         controller.pauseCamera();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SavedScreen(
-                                callBack: () {
-                                  controller.resumeCamera();
-                                },
-                              ),
-                            ));
+                        if (await interstitialAd.isLoaded) {
+                          interstitialAd.show();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SavedScreen(
+                                  callBack: () {
+                                    controller.resumeCamera();
+                                  },
+                                ),
+                              ));
+                        } else {
+                          showSnackBar("Interstitial ad is still loading...");
+                        }
                       },
                       child: Column(
                         children: <Widget>[
@@ -480,7 +485,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
+                      width: width * 0.1,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -494,7 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.black54,
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
                               child: Icon(
                                 Icons.image,
                                 color: Colors.white,
@@ -507,15 +512,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
+                      width: width * 0.1,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HistoryScreen(),
-                            ));
+                      onTap: () async {
+                        if (await interstitialAd.isLoaded) {
+                          interstitialAd.show();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HistoryScreen(),
+                              ));
+                        } else {
+                          showSnackBar("Interstitial ad is still loading...");
+                        }
                       },
                       child: Column(
                         children: <Widget>[
@@ -525,7 +535,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.black54,
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
                               child: Icon(
                                 Icons.history,
                                 color: Colors.white,

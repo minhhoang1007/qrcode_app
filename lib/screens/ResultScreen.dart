@@ -20,16 +20,7 @@ class _ResultScreenState extends State<ResultScreen> {
   String urlSearch;
   String urlWeb;
   AdmobBannerSize bannerSize;
-
   AdmobInterstitial interstitialAd;
-  Future<void> _shareText() async {
-    try {
-      Share.text('ID Product: ', widget.id, 'text/plain');
-    } catch (e) {
-      print('error: $e');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -44,6 +35,14 @@ class _ResultScreenState extends State<ResultScreen> {
       },
     );
     interstitialAd.load();
+  }
+
+  Future<void> _shareText() async {
+    try {
+      Share.text('ID Product: ', widget.id, 'text/plain');
+    } catch (e) {
+      print('error: $e');
+    }
   }
 
   void handleEvent(
@@ -90,6 +89,8 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -141,14 +142,13 @@ class _ResultScreenState extends State<ResultScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
+                    height: height * 0.02,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.1),
+                    padding: EdgeInsets.only(left: width * 0.1),
                     child: Container(
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: height * 0.1,
+                      width: width * 0.8,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -164,11 +164,10 @@ class _ResultScreenState extends State<ResultScreen> {
                   SizedBox(
                     height: 20,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.1),
+                  Container(
+                    alignment: Alignment.center,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Column(
                           children: <Widget>[
@@ -276,18 +275,14 @@ class _ResultScreenState extends State<ResultScreen> {
                             Text("Web", style: TextStyle(color: Colors.white))
                           ],
                         ),
-                        SizedBox(
-                          width: 20,
-                        ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: height * 0.1,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.3),
+                  Container(
+                    alignment: Alignment.center,
                     child: GestureDetector(
                       onTap: () {
                         widget.callBack();
@@ -296,8 +291,8 @@ class _ResultScreenState extends State<ResultScreen> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            height: MediaQuery.of(context).size.height * 0.05,
-                            width: MediaQuery.of(context).size.width * 0.35,
+                            height: height * 0.05,
+                            width: width * 0.35,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(32),
                             ),
@@ -325,14 +320,11 @@ class _ResultScreenState extends State<ResultScreen> {
                 ],
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                alignment: Alignment.center,
-                child: AdmobBanner(
-                  adUnitId: bannerId,
-                  adSize: bannerSize,
-                ),
+            Container(
+              alignment: Alignment.center,
+              child: AdmobBanner(
+                adUnitId: bannerId,
+                adSize: bannerSize,
               ),
             ),
           ],

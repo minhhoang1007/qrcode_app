@@ -23,16 +23,6 @@ class _SavedScreenState extends State<SavedScreen> {
     Common.img = prefs.getStringList(Common.LIST_TOW);
   }
 
-  void removeValues(String nam) {
-    Common.img.remove(nam);
-    prefs.setStringList(Common.LIST_TOW, Common.img).then((onValue) {
-      if (onValue)
-        setState(() {
-          Common.img;
-        });
-    });
-  }
-
   @override
   void initState() {
     bannerSize = AdmobBannerSize.MEDIUM_RECTANGLE;
@@ -46,6 +36,16 @@ class _SavedScreenState extends State<SavedScreen> {
     interstitialAd.load();
     getString();
     super.initState();
+  }
+
+  void removeValues(String nam) {
+    Common.img.remove(nam);
+    prefs.setStringList(Common.LIST_TOW, Common.img).then((onValue) {
+      if (onValue)
+        setState(() {
+          Common.img;
+        });
+    });
   }
 
   //Share
@@ -86,6 +86,32 @@ class _SavedScreenState extends State<SavedScreen> {
     ));
   }
 
+  void _showSimpleDialog(String ind) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            children: <Widget>[
+              ListTile(
+                onTap: () {
+                  _shareText(ind);
+                },
+                leading: Icon(Icons.share, color: Colors.grey),
+                title: Text("Share"),
+              ),
+              ListTile(
+                onTap: () {
+                  removeValues(ind);
+                  Navigator.of(context).pop();
+                },
+                leading: Icon(Icons.delete, color: Colors.grey),
+                title: Text("Delete"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -95,6 +121,8 @@ class _SavedScreenState extends State<SavedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -140,8 +168,8 @@ class _SavedScreenState extends State<SavedScreen> {
                       itemBuilder: (context, int index) {
                         return Padding(
                           padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.05,
-                            right: MediaQuery.of(context).size.width * 0.05,
+                            left: width * 0.05,
+                            right: width * 0.05,
                           ),
                           child: Card(
                             color: Colors.grey,
@@ -173,18 +201,17 @@ class _SavedScreenState extends State<SavedScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
+                            height: height * 0.1,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.05),
+                            padding: EdgeInsets.only(left: width * 0.05),
                             child: Text(
                                 "Please create a QR code to receive results",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 20)),
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
+                            height: height * 0.1,
                           ),
                           GestureDetector(
                             onTap: () async {
@@ -200,8 +227,8 @@ class _SavedScreenState extends State<SavedScreen> {
                               }
                             },
                             child: Container(
-                              height: MediaQuery.of(context).size.height * 0.1,
-                              width: MediaQuery.of(context).size.width * 0.5,
+                              height: height * 0.1,
+                              width: width * 0.5,
                               decoration: BoxDecoration(
                                 color: Colors.orange,
                                 borderRadius: BorderRadius.circular(12),
@@ -219,45 +246,16 @@ class _SavedScreenState extends State<SavedScreen> {
                       ),
                     ),
             ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                child: AdmobBanner(
-                  adUnitId: bannerId,
-                  adSize: bannerSize,
-                ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: AdmobBanner(
+                adUnitId: bannerId,
+                adSize: bannerSize,
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void _showSimpleDialog(String ind) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            children: <Widget>[
-              ListTile(
-                onTap: () {
-                  _shareText(ind);
-                },
-                leading: Icon(Icons.share, color: Colors.grey),
-                title: Text("Share"),
-              ),
-              ListTile(
-                onTap: () {
-                  removeValues(ind);
-                  Navigator.of(context).pop();
-                },
-                leading: Icon(Icons.delete, color: Colors.grey),
-                title: Text("Delete"),
-              ),
-            ],
-          );
-        });
   }
 }

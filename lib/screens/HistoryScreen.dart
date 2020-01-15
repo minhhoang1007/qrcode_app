@@ -65,6 +65,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -113,8 +115,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         itemBuilder: (context, int index) {
                           return Padding(
                             padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05,
+                              left: width * 0.05,
+                              right: width * 0.05,
                             ),
                             child: Card(
                               color: Colors.grey,
@@ -151,14 +153,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold)),
                       )),
-            Expanded(
-              flex: 2,
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                child: AdmobBanner(
-                  adUnitId: bannerId,
-                  adSize: bannerSize,
-                ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: AdmobBanner(
+                adUnitId: bannerId,
+                adSize: bannerSize,
               ),
             ),
           ],
