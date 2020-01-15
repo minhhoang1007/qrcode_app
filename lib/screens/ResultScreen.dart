@@ -283,48 +283,12 @@ class _ResultScreenState extends State<ResultScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.1,
                   ),
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.3),
-                  //   child: GestureDetector(
-                  //     onTap: () {
-                  //       widget.callBack();
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //     child: Column(
-                  //       children: <Widget>[
-                  //         Container(
-                  //           height: MediaQuery.of(context).size.height * 0.05,
-                  //           width: MediaQuery.of(context).size.width * 0.35,
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(32),
-                  //           ),
-                  //           child: Center(
-                  //             child: Image.asset(
-                  //               "assets/images/qrcode.png",
-                  //               fit: BoxFit.fill,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //         SizedBox(
-                  //           height: 5,
-                  //         ),
-                  //         Text(
-                  //           "Scan new",
-                  //           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                   Container(
                     alignment: Alignment.center,
                     child: GestureDetector(
                       onTap: () {
+                        widget.callBack();
                         Navigator.of(context).pop();
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => HomeScreen()));
                       },
                       child: Column(
                         children: <Widget>[
