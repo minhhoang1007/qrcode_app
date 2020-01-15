@@ -105,7 +105,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                 onTap: () {
                   runSave();
                   Fluttertoast.showToast(
-                      msg: "Save Image Code",
+                      msg: "Save Image Code Success !",
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIos: 1,
@@ -154,15 +154,14 @@ class _NewQRScreenState extends State<NewQRScreen> {
             Navigator.pop(context);
           },
         ),
-        title: Center(
-          child: Text(
-            "Create code",
-            style: TextStyle(color: Colors.white),
-          ),
+        title: Text(
+          "Create code",
+          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height * 1,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.black,
         ),
@@ -170,43 +169,30 @@ class _NewQRScreenState extends State<NewQRScreen> {
           child: Column(
             children: <Widget>[
               Container(
-                height: MediaQuery.of(context).size.height * 0.4,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                ),
+                height: MediaQuery.of(context).size.height - 250.0 - 70.0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: TextField(
-                          controller: _controller,
-                          decoration: InputDecoration(
-                            hintStyle: TextStyle(fontSize: 16),
-                            border: InputBorder.none,
-                            hintText: "Enter website, text,"
-                                "email,....",
-                            contentPadding: EdgeInsets.all(10),
-                          ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      margin: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(fontSize: 16),
+                          border: InputBorder.none,
+                          hintText: "Enter website, text,"
+                              "email,....",
+                          contentPadding: EdgeInsets.all(10),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20.0),
                       child: GestureDetector(
                         onTap: () {
                           _showSimpleDialogHN();
@@ -219,10 +205,9 @@ class _NewQRScreenState extends State<NewQRScreen> {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              SizedBox(
-                                width: 5,
-                              ),
                               Center(child: Text(hn, style: TextStyle(color: Colors.black))),
                               Icon(
                                 Icons.arrow_drop_down,
@@ -236,8 +221,7 @@ class _NewQRScreenState extends State<NewQRScreen> {
                     SizedBox(
                       height: 50,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.35),
+                    Center(
                       child: GestureDetector(
                         onTap: () {
                           _controller.text == ""
@@ -260,8 +244,8 @@ class _NewQRScreenState extends State<NewQRScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              "Create",
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              "CREATE",
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),
                             ),
                           ),
                         ),
@@ -269,9 +253,6 @@ class _NewQRScreenState extends State<NewQRScreen> {
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.15,
               ),
               Container(
                 decoration: BoxDecoration(

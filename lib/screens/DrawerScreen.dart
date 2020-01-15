@@ -12,21 +12,14 @@ class DrawerScreen extends StatefulWidget {
 }
 
 class _DrawerScreenState extends State<DrawerScreen> {
-  String urlNangcap = 'https://flutter.dev';
-  String urlFeedback = 'https://flutter.dev';
-  String urlMoreApp = 'https://flutter.dev';
-  String urlTest = 'https://flutter.dev';
-  String urlChinhsach = 'https://flutter.dev';
+  String urlNangcap = 'http://play.google.com/store/apps/details?id=com.qrcode.barcode.qrscanner';
+  String urlFeedback = 'mailto:tahanh.aib@gmail.com?subject=QR Code Feedback&body=';
+  String urlMoreApp = 'http://play.google.com/store/apps/details?id=com.qrcode.barcode.qrscanner';
+  String urlTest = 'http://play.google.com/store/apps/details?id=com.qrcode.barcode.qrscanner';
+  String urlChinhsach = 'http://play.google.com/store/apps/details?id=com.qrcode.barcode.qrscanner';
   AdmobBannerSize bannerSize;
   AdmobInterstitial interstitialAd;
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 
   @override
   void initState() {
@@ -59,6 +52,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
       case AdmobAdEvent.rewarded:
         break;
       default:
+    }
+  }
+
+  @override
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
@@ -144,7 +146,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   ),
                   ListTile(
                     onTap: () {
-                      _launchURL(urlTest);
+                      _launchURL(urlNangcap);
                     },
                     leading: Icon(
                       Icons.system_update_alt,
@@ -155,29 +157,29 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  ListTile(
-                    onTap: () {
-                      _launchURL(urlChinhsach);
-                    },
-                    leading: Icon(
-                      Icons.check_circle,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      "Policy",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.card_giftcard,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      "Other application",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                  // ListTile(
+                  //   onTap: () {
+                  //     _launchURL(urlChinhsach);
+                  //   },
+                  //   leading: Icon(
+                  //     Icons.check_circle,
+                  //     color: Colors.white,
+                  //   ),
+                  //   title: Text(
+                  //     "Policy",
+                  //     style: TextStyle(color: Colors.white),
+                  //   ),
+                  // ),
+                  // ListTile(
+                  //   leading: Icon(
+                  //     Icons.card_giftcard,
+                  //     color: Colors.white,
+                  //   ),
+                  //   title: Text(
+                  //     "Other application",
+                  //     style: TextStyle(color: Colors.white),
+                  //   ),
+                  // ),
                   Container(
                     color: Colors.white,
                   ),

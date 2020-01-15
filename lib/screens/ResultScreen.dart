@@ -47,8 +47,7 @@ class _ResultScreenState extends State<ResultScreen> {
     interstitialAd.load();
   }
 
-  void handleEvent(
-      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+  void handleEvent(AdmobAdEvent event, Map<String, dynamic> args, String adType) {
     switch (event) {
       case AdmobAdEvent.loaded:
         showSnackBar('New Admob $adType Ad loaded!');
@@ -146,23 +145,18 @@ class _ResultScreenState extends State<ResultScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.1),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10, top: 10),
-                        child: widget.id.contains(new RegExp(r'[0-9]'))
-                            ? Text("ID product: \n" + widget.id)
-                            : Text("Link URL: \n" + widget.id),
-                      ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
                     ),
+                    child: widget.id.contains(new RegExp(r'[0-9]'))
+                        ? Text("ID product: \n" + widget.id)
+                        : Text("Link URL: \n" + widget.id),
                   ),
                   SizedBox(
                     height: 20,
@@ -175,8 +169,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                Clipboard.setData(
-                                    ClipboardData(text: widget.id));
+                                Clipboard.setData(ClipboardData(text: widget.id));
                                 Fluttertoast.showToast(
                                     msg: "Copied to clipboard",
                                     toastLength: Toast.LENGTH_SHORT,
@@ -249,15 +242,25 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               ),
                             ),
-                            Text("Search",
-                                style: TextStyle(color: Colors.white))
+                            Text("Search", style: TextStyle(color: Colors.white))
                           ],
                         ),
                         Column(
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                _launchURL(urlWeb);
+                                if (widget.id.contains(new RegExp(r'[0-9]'))) {
+                                  Fluttertoast.showToast(
+                                      msg: "Can't access. This is not website URL.",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIos: 1,
+                                      backgroundColor: Colors.white,
+                                      textColor: Colors.orange,
+                                      fontSize: 16.0);
+                                } else {
+                                  _launchURL(urlWeb);
+                                }
                               },
                               child: Container(
                                 height: 50,
@@ -283,48 +286,11 @@ class _ResultScreenState extends State<ResultScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.1,
                   ),
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.3),
-                  //   child: GestureDetector(
-                  //     onTap: () {
-                  //       widget.callBack();
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //     child: Column(
-                  //       children: <Widget>[
-                  //         Container(
-                  //           height: MediaQuery.of(context).size.height * 0.05,
-                  //           width: MediaQuery.of(context).size.width * 0.35,
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(32),
-                  //           ),
-                  //           child: Center(
-                  //             child: Image.asset(
-                  //               "assets/images/qrcode.png",
-                  //               fit: BoxFit.fill,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //         SizedBox(
-                  //           height: 5,
-                  //         ),
-                  //         Text(
-                  //           "Scan new",
-                  //           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                   Container(
                     alignment: Alignment.center,
                     child: GestureDetector(
                       onTap: () {
                         Navigator.of(context).pop();
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => HomeScreen()));
                       },
                       child: Column(
                         children: <Widget>[
@@ -346,10 +312,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           ),
                           Text(
                             "Scan new",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                         ],
                       ),

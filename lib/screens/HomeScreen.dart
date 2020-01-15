@@ -385,15 +385,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.5,
+            bottom: MediaQuery.of(context).size.height * 0.5 + 25,
             child: Container(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
-              width: MediaQuery.of(context).size.width * 1,
-              height: MediaQuery.of(context).size.height * 0.05,
-              child: Center(
-                child: Divider(
-                  color: Colors.red,
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                width: 300.0,
+                height: 3,
+                child: Center(
+                  child: Divider(
+                    color: Colors.red,
+                  ),
                 ),
               ),
             ),

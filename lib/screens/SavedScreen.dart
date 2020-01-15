@@ -57,8 +57,7 @@ class _SavedScreenState extends State<SavedScreen> {
     }
   }
 
-  void handleEvent(
-      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+  void handleEvent(AdmobAdEvent event, Map<String, dynamic> args, String adType) {
     switch (event) {
       case AdmobAdEvent.loaded:
         showSnackBar('New Admob $adType Ad loaded!');
@@ -119,8 +118,7 @@ class _SavedScreenState extends State<SavedScreen> {
             onPressed: () async {
               if (await interstitialAd.isLoaded) {
                 interstitialAd.show();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NewQRScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => NewQRScreen()));
               } else {
                 showSnackBar("Interstitial ad is still loading...");
               }
@@ -157,8 +155,7 @@ class _SavedScreenState extends State<SavedScreen> {
                                   size: 50.0,
                                 ),
                               ),
-                              title: Text(Common.img[index],
-                                  style: TextStyle(color: Colors.white)),
+                              title: Text(Common.img[index], style: TextStyle(color: Colors.white)),
                               trailing: Icon(
                                 Icons.more_vert,
                                 color: Colors.white,
@@ -176,42 +173,32 @@ class _SavedScreenState extends State<SavedScreen> {
                             height: MediaQuery.of(context).size.height * 0.1,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.05),
+                            padding: EdgeInsets.only(bottom: 50),
                             child: Text(
-                                "Please create a QR code to receive results",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20)),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
+                              "Please create a QR code to receive results",
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                           GestureDetector(
                             onTap: () async {
                               if (await interstitialAd.isLoaded) {
                                 interstitialAd.show();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => NewQRScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => NewQRScreen()));
                               } else {
-                                showSnackBar(
-                                    "Interstitial ad is still loading...");
+                                showSnackBar("Interstitial ad is still loading...");
                               }
                             },
                             child: Container(
-                              height: MediaQuery.of(context).size.height * 0.1,
+                              padding: EdgeInsets.symmetric(vertical: 15.0),
                               width: MediaQuery.of(context).size.width * 0.5,
                               decoration: BoxDecoration(
                                 color: Colors.orange,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(5),
                               ),
                               child: Center(
                                 child: Text("Start create code",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
+                                    style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
                               ),
                             ),
                           ),

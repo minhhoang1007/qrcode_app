@@ -80,10 +80,12 @@ public class MainActivity extends FlutterActivity  implements RatingDialog.Ratin
   }
   public void rateAuto() {
     int rate = SharedPrefsUtils.getInstance(this).getInt("rate");
-    if (rate < 1) {
+    if (rate < 2) {
       RatingDialog ratingDialog = new RatingDialog(this);
       ratingDialog.setRatingDialogListener(this);
       ratingDialog.showDialog();
+      int r = rate ++;
+      SharedPrefsUtils.getInstance(this).putInt("rate", r);
     }
   }
   void rateManual() {
