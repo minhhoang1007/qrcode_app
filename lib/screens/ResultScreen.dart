@@ -257,7 +257,7 @@ class _ResultScreenState extends State<ResultScreen> {
                               onTap: () {
                                 widget.id.contains(new RegExp(r'[0-9]'))
                                     ? Fluttertoast.showToast(
-                                        msg: "ID Không hợp lệ",
+                                        msg: "ID illegal",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
                                         timeInSecForIos: 1,
