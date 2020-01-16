@@ -255,7 +255,16 @@ class _ResultScreenState extends State<ResultScreen> {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                _launchURL(urlWeb);
+                                widget.id.contains(new RegExp(r'[0-9]'))
+                                    ? Fluttertoast.showToast(
+                                        msg: "ID Không hợp lệ",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIos: 1,
+                                        backgroundColor: Colors.white,
+                                        textColor: Colors.orange,
+                                        fontSize: 16.0)
+                                    : _launchURL(urlWeb);
                               },
                               child: Container(
                                 height: 50,
@@ -299,7 +308,7 @@ class _ResultScreenState extends State<ResultScreen> {
                             child: Center(
                               child: Image.asset(
                                 "assets/images/qrcode.png",
-                                fit: BoxFit.fill,
+                                fit: BoxFit.contain,
                               ),
                             ),
                           ),

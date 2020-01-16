@@ -58,21 +58,22 @@ class _NewQRScreenState extends State<NewQRScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.6),
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(120),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(120),
+                        ),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
                       ),
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
-                    ),
+                    ],
                   ),
                 ),
                 Container(

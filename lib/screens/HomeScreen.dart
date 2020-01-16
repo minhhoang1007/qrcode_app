@@ -417,6 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Container(
                 height: height * 0.1,
+                width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -443,9 +444,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(color: Colors.white))
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      width: width * 0.1,
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -484,9 +482,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      width: width * 0.1,
-                    ),
                     GestureDetector(
                       onTap: () {
                         _openGallary(context);
@@ -510,9 +505,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(color: Colors.white))
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      width: width * 0.1,
                     ),
                     GestureDetector(
                       onTap: () async {
